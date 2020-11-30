@@ -1,35 +1,54 @@
 <!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form method="POST" action="/edit/{{_id}}">
 				<div class="modal-header">						
-					<h4 class="modal-title">Edit Employee</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Edit Product</h4>
 				</div>
 				<div class="modal-body">					
-					<div class="form-group">
-						<label>Name</label>
-						<input type="text" class="form-control" required>
+					<div class="form-group">	
+						<label for="name">Name</label>
+						<input type="text" class="form-control" name="name" id="name">
 					</div>
 					<div class="form-group">
-						<label>Email</label>
-						<input type="email" class="form-control" required>
+						<label for="description">Description</label>
+						<textarea type="email" class="form-control" rows="5" name="description" id="description"></textarea>
 					</div>
 					<div class="form-group">
-						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<label for="price">Price</label>
+						<input class="form-control" name="price" id="price">
 					</div>
 					<div class="form-group">
-						<label>Phone</label>
-						<input type="text" class="form-control" required>
-					</div>					
+						<label for="discount">Discount</label>
+						<input type="text" class="form-control" name="discount" id="discount">
+					</div>		
+					<div class="form-group">
+						<label for="brand">Brand</label>
+						<select class="form-control" name="brand" id="brand">
+							<option>Apple</option>
+							<option>Microsoft</option>
+							<option>LG</option>
+							<option>Samsung</option>
+						</select>
+					</div>	
+					<div class="form-group">
+						<label for="category">Category</label>
+						<select class="form-control" name="category" id="category">
+							<option>Laptop</option>
+							<option>Smartphone</option>
+							<option>Headphone</option>
+							<option>Camera</option>
+						</select>
+					</div>	
+				 	<div class="form-group">
+						<label for="image">Link of Image</label>
+						<input type="text" name="image" id="image"><!-- class="form-control-file" --> 
+					</div>								
 				</div>
 				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<a class="btn btn-primary" href="/" role="button">Cancel</a>
 					<input type="submit" class="btn btn-info" value="Save">
 				</div>
 			</form>
 		</div>
 	</div>
-</div>

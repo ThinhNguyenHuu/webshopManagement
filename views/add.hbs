@@ -1,6 +1,6 @@
 <div class="modal-dialog">
 	<div class="modal-content">
-		<form method="POST" action="https://inspiredigital.herokuapp.com/api/product/add/" enctype="multipart/form-data">
+		<form method="POST" action="/add" > <!--enctype="multipart/form-data"-->
 			<div class="modal-header">						
 				<h4 class="modal-title">Add new product</h4>
 			</div>
@@ -40,8 +40,8 @@
 					</select>
 				</div>	
 				 <div class="form-group">
-					<label for="image">Image</label>
-					<input type="file" class="form-control-file" name="image" id="image">
+					<label for="image">Link of Image</label>
+					<input type="text" name="image" id="image"><!-- class="form-control-file" --> 
 				</div>				
 			</div>
 			<div class="modal-footer">							

@@ -15,6 +15,6 @@ router.post('/add', controller.post_add);
 
 router.get('/edit/:_id', controller.get_edit);
 
-router.post('/edit', controller.post_edit);
+router.post('/edit/:_id', controller.post_edit);
 
 module.exports = router;
