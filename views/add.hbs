@@ -1,6 +1,11 @@
+{{#if error}}
+	<div class="alert alert-danger" role="alert">
+		{{this.error}}
+	</div>
+{{/if}}
 <div class="modal-dialog">
 	<div class="modal-content">
-		<form method="POST" action="/add" > <!--enctype="multipart/form-data"-->
+		<form method="POST" action="/add" enctype="multipart/form-data">
 			<div class="modal-header">						
 				<h4 class="modal-title">Add new product</h4>
 			</div>
@@ -15,33 +20,31 @@
 				</div>
 				<div class="form-group">
 					<label for="price">Price</label>
-					<input class="form-control" name="price" id="price" required>
+					<input type="number" class="form-control" name="price" id="price" required>
 				</div>
 				<div class="form-group">
 					<label for="discount">Discount</label>
-					<input type="text" class="form-control" name="discount" id="discount" required>
+					<input type="number" class="form-control" name="discount" id="discount" required>
 				</div>		
 				<div class="form-group">
 					<label for="brand">Brand</label>
 					<select class="form-control" name="brand" id="brand">
-						<option>Apple</option>
-						<option>Microsoft</option>
-						<option>LG</option>
-						<option>Samsung</option>
+						{{#each listBrand}}
+							<option value="{{_id}}">{{name}}</option>
+						{{/each}}
 					</select>
 				</div>	
 				<div class="form-group">
 					<label for="category">Category</label>
 					<select class="form-control" name="category" id="category">
-						<option>Laptop</option>
-						<option>Smartphone</option>
-						<option>Headphone</option>
-						<option>Camera</option>
+						{{#each listCategory}}
+							<option value="{{_id}}">{{name}}</option>
+						{{/each}}
 					</select>
 				</div>	
 				 <div class="form-group">
-					<label for="image">Link of Image</label>
-					<input type="text" name="image" id="image"><!-- class="form-control-file" --> 
+					<label for="image">Images</label>
+					<input type="file" class="form-file-control" name="image" id="image" accept="image/*" multiple> 
 				</div>				
 			</div>
 			<div class="modal-footer">							
