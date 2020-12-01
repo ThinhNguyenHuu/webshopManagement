@@ -1,4 +1,3 @@
-const request = require('request');
 const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
