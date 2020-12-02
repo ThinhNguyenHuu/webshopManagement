@@ -1,65 +1,50 @@
+<!--main-container-part-->
+<div id="content">
+  <!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+  </div>
+  <!--End-breadcrumbs-->
 
-<div class="container-xl">
-	<div class="table-responsive">
-		<div class="table-wrapper">
-			<div class="table-title">
-				<div class="row">
-					<div class="col-sm-6">
-						<h2>Management</h2>
-					</div>
-					<div class="col-sm-6">
-						<a href="/add" class="btn btn-success"><i class="material-icons">&#xE147;</i> <span>Add</span></a>						
-					</div>
-				</div>
-			</div>
-			<div style="table-responsive">
-				<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Price</th>
-						<th>Discount</th>
-            <th>Brand</th>
-            <th>Category</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
+  <!--Content-->
+  <div class="container-fluid">
+    <!--Action boxes-->
+    <div class="quick-actions_homepage">
+      <ul class="quick-actions">
+        <li class="bg_lb"> <a href="/"> <i class="icon-dashboard"></i> Dashboard </a> </li>
+        <li class="bg_lg"> <a href="/chart"> <i class="icon-signal"></i> Charts</a> </li>
+        <li class="bg_lo"> <a href="/product"> <i class="icon-th"></i> Products</a> </li>
+      </ul>
+    </div>
+    <!--End-Action boxes-->    
 
-					{{#each list}}
-						<tr>
-							<td>{{name}}</td>
-							<td>{{description}}</td>
-							<td>{{price}}</td>
-							<td>{{discount}}</td>
-							<td>{{brand}}</td>
-							<td>{{category}}</td>
-							<td>
-								<a href="/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								<a href="/delete/{{_id}}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							</td>
-						</tr>
-					{{/each}}
-
-				</tbody>
-			</table>
-			</div>
-			
-			<div class="clearfix">
-				<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-				<ul class="pagination">
-					<li class="page-item disabled"><a href="#">Previous</a></li>
-					<li class="page-item"><a href="#" class="page-link">1</a></li>
-					<li class="page-item"><a href="#" class="page-link">2</a></li>
-					<li class="page-item active"><a href="#" class="page-link">3</a></li>
-					<li class="page-item"><a href="#" class="page-link">4</a></li>
-					<li class="page-item"><a href="#" class="page-link">5</a></li>
-					<li class="page-item"><a href="#" class="page-link">Next</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>        
+    <!--Chart-box-->    
+    <div class="row-fluid">
+      <div class="widget-box">
+        <div class="widget-title bg_lg"><span class="icon"><i class="icon-signal"></i></span>
+          <h5>Site Analytics</h5>
+        </div>
+        <div class="widget-content" >
+          <div class="row-fluid">
+            <div class="span9">
+              <div class="chart"></div>
+            </div>
+            <div class="span3">
+              <ul class="site-stats">
+                <li class="bg_lh"><i class="icon-user"></i> <strong>2540</strong> <small>Total Users</small></li>
+                <li class="bg_lh"><i class="icon-plus"></i> <strong>120</strong> <small>New Users </small></li>
+                <li class="bg_lh"><i class="icon-shopping-cart"></i> <strong>656</strong> <small>Total Shop</small></li>
+                <li class="bg_lh"><i class="icon-tag"></i> <strong>9540</strong> <small>Total Orders</small></li>
+                <li class="bg_lh"><i class="icon-repeat"></i> <strong>10</strong> <small>Pending Orders</small></li>
+                <li class="bg_lh"><i class="icon-globe"></i> <strong>8540</strong> <small>Online Orders</small></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <!--End-Chart-box--> 
+  </div>
 </div>
-
-
+<!--end-main-container-part-->

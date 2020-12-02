@@ -1,0 +1,82 @@
+
+
+<div id="content">
+<div id="content-header">
+  <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> </div>
+  <h1>Add new product</h1>
+</div>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="widget-box">
+        <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+          <h5>Product</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form action="/product/add" method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <div class="control-group">
+              <label class="control-label">Name :</label>
+              <div class="controls">
+                <input type="text" class="span9" id="name" name="name" required/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Description :</label>
+              <div class="controls">
+                <textarea type="text" class="span9" rows="5" id="description" name="description" required ></textarea>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Price :</label>
+              <div class="controls">
+                <input type="number" class="span9" value="0" id="price" name="price" required/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Discount :</label>
+              <div class="controls">
+                <input type="number" class="span9" value="0" id="discount" name="discount" required/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Brand :</label>
+              <div class="controls">
+                <select class="span9" id="brand" name="brand">
+                  {{#each listBrand}}
+                  <option value="{{_id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Category :</label>
+              <div class="controls">
+                <select class="span9" id="category" name="category">
+                  {{#each listCategory}}
+                  <option value="{{_id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+						<div class="control-group">
+							<label class="control-label">Images :</label>
+              <div class="controls">
+                <input type="file" name="image" id="image" accept="image/*" multiple required/>
+              </div>
+						</div>
+            <div style="width:800px; display: flex;flex-wrap: wrap;padding: 20px 100px;margin:0 auto;">
+              <div class="column" style="display:flex;flex-wrap: wrap;width:100%"></div>
+            </div>
+            <div class="form-actions" style="text-align: end;padding-right:70px">
+							<a class="btn btn-primary" href="javascript:history.back()" role="button">Cancel</a>
+              <button type="submit" class="btn btn-success">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>	
+</div>
+</div>
+
+<script src="/javascripts/previewUpload.js"></script>
