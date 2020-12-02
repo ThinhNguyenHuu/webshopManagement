@@ -26,7 +26,7 @@ file.onchange = () => {
       let img = document.createElement("img");
       reader.addEventListener("load", function() {
         img.setAttribute("src", this.result);
-        img.className = "img-upload-thumbnail img-thumbnail";
+        img.className = "img-upload-thumbnail";
       });
 
       // store images in the array for animation
@@ -42,11 +42,11 @@ file.onchange = () => {
   let i = 0;
   let clearinter = setInterval(() => {
     arrImg[i].setAttribute("style", "display : initial");
-    arrImg[i].classList.add("animated", "zoomIn");
+    arrImg[i].classList.add("animated", "bounceInUp");
     i++;
     // clear set interval when i is equal to array lenght
     i == arrImg.length ? clearInterval(clearinter) : undefined;
-  }, 200);
+  }, 150);
 };
 
 // obtain parent node which has minimun child

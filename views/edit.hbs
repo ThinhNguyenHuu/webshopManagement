@@ -1,58 +1,60 @@
 <!-- Edit Modal HTML -->
-	<div class="modal-dialog" style="max-width: 700px;">
-		<div class="modal-content">
-			<form method="POST" action="/edit/{{product._id}}" enctype="multipart/form-data">
-				<div class="modal-header">						
-					<h4 class="modal-title">Edit Product</h4>
+<div class="modal-dialog" style="max-width: 700px;">
+	<div class="modal-content">
+		<form method="POST" action="/edit/{{product._id}}" enctype="multipart/form-data">
+			<div class="modal-header">						
+				<h4 class="modal-title">Edit Product</h4>
+			</div>
+			<div class="modal-body">					
+				<div class="form-group">	
+					<label for="name">Name</label>
+					<input type="text" class="form-control" name="name" id="name" value="{{product.name}}">
 				</div>
-				<div class="modal-body">					
-					<div class="form-group">	
-						<label for="name">Name</label>
-						<input type="text" class="form-control" name="name" id="name" value="{{product.name}}">
-					</div>
-					<div class="form-group">
-						<label for="description">Description</label>
-						<textarea type="email" class="form-control" rows="5" name="description" id="description">{{product.description}}</textarea>
-					</div>
-					<div class="form-group">
-						<label for="price">Price</label>
-						<input type="number" class="form-control" name="price" id="price" value="{{product.price}}">
-					</div>
-					<div class="form-group">
-						<label for="discount">Discount</label>
-						<input type="number" class="form-control" name="discount" id="discount" value="{{product.discount}}">
-					</div>		
-					<div class="form-group">
-						<label for="brand">Brand</label>
-						<select class="form-control" name="brand" id="brand">
-							{{#each listBrand}}
-								<option value="{{_id}}" {{#ifEquals _id ../product.brand }}selected="selected"{{/ifEquals}}>{{name}}</option>
-							{{/each}}
-						</select>
-					</div>	
-					<div class="form-group">
-						<label for="category">Category</label>
-						<select class="form-control" name="category" id="category">
-							{{#each listCategory}}
-								<option value="{{_id}}" {{#ifEquals _id ../product.category }}selected="selected"{{/ifEquals}}>{{name}}</option>
-							{{/each}}
-						</select>
-					</div>	
-				 	<div class="form-group">
-						<label for="image">Images</label>
-						<input type="file" class="form-file-control" name="image" id="image" accept="image/*" multiple> 
-					</div>	
-					<div class="row" style="display: flex;flex-wrap:wrap;">
-						<div class="column"></div>
-						<div class="column"></div>
-						<div class="column"></div>
-						<div class="column"></div>
-					</div>							
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea type="email" class="form-control" rows="5" name="description" id="description">{{product.description}}</textarea>
 				</div>
-				<div class="modal-footer">
-					<a class="btn btn-primary" href="/" role="button">Cancel</a>
-					<input type="submit" class="btn btn-success" value="Save">
+				<div class="form-group">
+					<label for="price">Price</label>
+					<input type="number" class="form-control" name="price" id="price" value="{{product.price}}">
 				</div>
-			</form>
-		</div>
+				<div class="form-group">
+					<label for="discount">Discount</label>
+					<input type="number" class="form-control" name="discount" id="discount" value="{{product.discount}}">
+				</div>		
+				<div class="form-group">
+					<label for="brand">Brand</label>
+					<select class="form-control" name="brand" id="brand">
+						{{#each listBrand}}
+							<option value="{{_id}}" {{#ifEquals _id ../product.brand }}selected="selected"{{/ifEquals}}>{{name}}</option>
+						{{/each}}
+					</select>
+				</div>	
+				<div class="form-group">
+					<label for="category">Category</label>
+					<select class="form-control" name="category" id="category">
+						{{#each listCategory}}
+							<option value="{{_id}}" {{#ifEquals _id ../product.category }}selected="selected"{{/ifEquals}}>{{name}}</option>
+						{{/each}}
+					</select>
+				</div>	
+				<div class="form-group">
+					<label for="image">Images</label>
+					<input type="file" class="form-file-control" name="image" id="image" accept="image/*" multiple> 
+				</div>	
+				<div class="row upload-thumbnail-container" style="display: flex;flex-wrap:wrap;">
+					<div class="column"></div>
+					<div class="column"></div>
+					<div class="column"></div>
+					<div class="column"></div>
+				</div>							
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-primary" href="/" role="button">Cancel</a>
+				<input type="submit" class="btn btn-success" value="Save">
+			</div>
+		</form>
 	</div>
+</div>
+
+<script src="/javascripts/previewUpload.js"></script>
