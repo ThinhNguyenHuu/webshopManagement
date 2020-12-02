@@ -4,14 +4,19 @@ const cloudinary = require('../cloudinary');
 const fs = require('fs');
 
 module.exports.list = async () => {
-    const listProduct = await db().collection('product').find().toArray();
-    for (product of listProduct) {
-        const brandPromise = db().collection('brand').findOne({_id: ObjectId(product.brand)});
-        const categoryPromise = db().collection('category').findOne({_id: ObjectId(product.category)});
+    const productPromise = db().collection('product').find().toArray();
+    const brandPromise = db().collection('brand').find().toArray();
+    const categoryPromise = db().collection('category').find().toArray();
 
-        product.brand = (await brandPromise).name;
-        product.category = (await categoryPromise).name;
-    }
+    const listProduct = await productPromise;
+    const listBrand = await brandPromise;
+    const listCategory = await categoryPromise;
+
+    listProduct.map(product => {
+        product.brand = listBrand.find(brand => brand._id.equals(product.brand)).name;
+        product.category = listCategory.find(category => category._id.equals(product.category)).name;
+        return product;
+    });
 
     return listProduct;
 }
@@ -145,6 +150,6 @@ const uploadFiles = async (files) => {
 
 const destroyFiles = async (sources) => {
     for (source of sources) {
-        await cloudinary.destroy(source.id);
+        cloudinary.destroy(source.id);
     }
 }
