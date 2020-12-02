@@ -140,8 +140,8 @@ table.table .avatar {
 }    
 
 /* Modal styles */
-.modal .modal-dialog {
-	max-width: 400px;
+.modal-dialog {
+	max-width: 700px;
 }
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
 	padding: 20px 30px;
@@ -172,3 +172,18 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }	
+.column {
+  flex: 25%;
+  padding: 0.1em;
+}
+
+.column .img-upload-thumbnail {
+  width: 100%;
+  display: none;
+	border: 2px solid #e5e6e6;
+	padding: 5px;
+}
+
+.upload-thumbnail-container {
+	padding: 1rem;
+}
