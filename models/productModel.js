@@ -3,24 +3,6 @@ const ObjectId = require('mongodb').ObjectId;
 const cloudinary = require('../cloudinary');
 const fs = require('fs');
 
-// module.exports.list = async () => {
-//     const productPromise = db().collection('product').find().toArray();
-//     const brandPromise = db().collection('brand').find().toArray();
-//     const categoryPromise = db().collection('category').find().toArray();
-
-//     const listProduct = await productPromise;
-//     const listBrand = await brandPromise;
-//     const listCategory = await categoryPromise;
-
-//     listProduct.map(product => {
-//         product.brand = listBrand.find(brand => brand._id.equals(product.brand)).name;
-//         product.category = listCategory.find(category => category._id.equals(product.category)).name;
-//         return product;
-//     });
-
-//     return listProduct;
-// }
-
 module.exports.list = async () => await db().collection('product').find().toArray();
 
 module.exports.delete = async (id) => {
