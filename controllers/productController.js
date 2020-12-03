@@ -34,7 +34,7 @@ module.exports.get_delete = async (req, res, next) => {
 module.exports.post_delete = async (req, res, next) => {
   if(req.params._id) {
     await productModel.delete(req.params._id);
-    res.redirect ("product/index");
+    res.redirect ("/product");
   } else {
     next();
   }
@@ -54,7 +54,7 @@ module.exports.post_add = async (req, res, next) => {
   const files = req.files.image;
   await productModel.add(req.body, files);
 
-  res.redirect('/');
+  res.redirect('/product');
 }
 
 module.exports.get_edit = async (req, res, next) => {
@@ -85,7 +85,7 @@ module.exports.post_edit = async (req, res, next) => {
     }
     
     await productModel.update(req.body, files, req.params._id);
-    res.redirect("product/index");
+    res.redirect("/product");
   } else {
     next();
   }
