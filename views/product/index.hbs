@@ -1,0 +1,70 @@
+
+<div id="content">
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <span>>></span> <a href="#" class="current">Product</a> </div>
+    <div class="row-fluid">
+      <div class="span6" ><h1>Products</h1></div>
+      <div class="span6" style="margin-top: 50px;text-align:end">
+      <a href="/product/add" class="btn btn-success align-items-end" style="margin-right: 20px;width: 50px;height: 20px">
+        <div class="row">
+          <div class="span6">
+            <i style="font-size: 21px;padding-left:10px; margin-left:15px" class="material-icons">&#xE147;</i> 
+          </div>
+          <div class="span6">
+            <span style="box-sizing: border-box;margin-left:5px">Add</span>
+          </div>
+        </div>
+      </a>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-box d-flex flex-row">
+          <div class="widget-title"> <span class="icon  "><i class="icon-th"></i></span>
+            <h5>Data</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <div class="table-responsive">
+              <table class="table table-bordered data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Discount</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each listProduct}}
+                <tr class="gradeA">
+                  <td>{{name}}</td>
+                  <td>{{description}}</td>
+                  <td>{{price}}</td>
+                  <td>{{discount}}</td>
+                  <td>{{brand}}</td>
+                  <td>{{category}}</td>
+                  <td>
+                    <div style="text-align: center;">
+                      <a href="product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                      <a href="product/delete/{{_id}}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>     
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

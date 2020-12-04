@@ -1,21 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Webshop Management</title>
-<link rel="stylesheet" href="/stylesheets/style.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<title>Admin</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+<link rel="stylesheet" href="/stylesheets/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/stylesheets/uniform.css" />
+<link rel="stylesheet" href="/stylesheets/select2.css" />
+<link rel="stylesheet" href="/stylesheets/matrix-style.css" />
+<link rel="stylesheet" href="/stylesheets/matrix-media.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-  {{{body}}}
+
+<!--Header-part-->
+<div id="header">
+  <h1><a href="/">Admin</a></h1>
+</div>
+<!--close-Header-part--> 
+
+
+<!--top-Header-menu-->
+<div id="user-nav" class="navbar navbar-inverse">
+  <ul class="nav">
+    <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a href="#"><i class="icon-user"></i> My Profile</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
+        <li class="divider"></li>
+        <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
+      </ul>
+    </li>
+    <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+  </ul>
+</div>
+<!--close-top-Header-menu-->
+
+<!--sidebar-menu-->
+<div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
+  <ul>
+    <li class="active"><a href="/"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+    <li><a href="/product"><i class="icon icon-th"></i> <span>Products</span></a></li>
+    <li> <a href="/charts"><i class="icon icon-signal"></i> <span>Charts &amp; graphs</span></a> </li>
+    <li class="content"> <span>Monthly Bandwidth Transfer</span>
+      <div class="progress progress-mini progress-danger active progress-striped">
+        <div style="width: 77%;" class="bar"></div>
+      </div>
+      <span class="percent">77%</span>
+      <div class="stat">21419.94 / 14000 MB</div>
+    </li>
+    <li class="content"> <span>Disk Space Usage</span>
+      <div class="progress progress-mini active progress-striped">
+        <div style="width: 87%;" class="bar"></div>
+      </div>
+      <span class="percent">87%</span>
+      <div class="stat">604.44 / 4000 MB</div>
+    </li>
+  </ul>
+</div>
+<!--sidebar-menu-->
+
+{{{body}}}
+
+<!--Footer-part-->
+
+<div class="row-fluid">
+  <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
+</div>
+
+<!--end-Footer-part-->
+
+<script src="/javascripts/jquery.min.js"></script> 
+<script src="/javascripts/jquery.ui.custom.js"></script> 
+<script src="/javascripts/bootstrap.min.js"></script> 
+<script src="/javascripts/jquery.uniform.js"></script> 
+<script src="/javascripts/select2.min.js"></script> 
+<script src="/javascripts/jquery.dataTables.min.js"></script> 
+<script src="/javascripts/matrix.js"></script> 
+<script src="/javascripts/matrix.tables.js"></script>
+<script src="/javascripts/excanvas.min.js"></script> 
+<script src="/javascripts/jquery.flot.min.js"></script> 
+<script src="/javascripts/jquery.flot.resize.min.js"></script> 
+<script src="/javascripts/jquery.peity.min.js"></script> 
+<script src="/javascripts/matrix.dashboard.js"></script> 
+
 </body>
 </html>
