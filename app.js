@@ -9,6 +9,8 @@ const hbs = require('hbs');
 
 const indexRouter = require('./routes/index');
 const productRouter = require('./routes/product');
+const categoryRouter = require('./routes/category');
+const brandRouter = require('./routes/brand');
 
 const app = express();
 
@@ -19,6 +21,8 @@ hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
   return (arg1.equals(arg2)) ? options.fn(this) : options.inverse(this);
 });
 
+
+
 app.use(fileupload({ useTempFiles: true }));
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,6 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/product', productRouter);
+app.use('/category', categoryRouter);
+app.use('/brand', brandRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

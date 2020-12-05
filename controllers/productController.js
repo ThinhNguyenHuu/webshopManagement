@@ -2,23 +2,61 @@ const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
 const { ObjectId } = require('mongodb');
+const db = require('../db');
+
+const PRODUCT_PER_PAGE = 5;
 
 module.exports.index = async (req, res, next) => {
-    const productPromise = productModel.list();
-    const brandPromise = brandModel.list();
-    const categoryPromise = categoryModel.list();
 
-    const listProduct = await productPromise;
-    const listBrand = await brandPromise;
-    const listCategory = await categoryPromise;
+  const brandPromise = brandModel.list();
+  const categoryPromise = categoryModel.list();
 
-    listProduct.map(product => {
-        product.brand = listBrand.find(brand => brand._id.equals(product.brand)).name;
-        product.category = listCategory.find(category => category._id.equals(product.category)).name;
-        return product;
-    });
+  // get product count
+  const count = await productModel.count();
 
-    res.render('product/index', { listProduct });
+  // get last page index
+  const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
+
+  // get search
+  const searchText = req.query.name || null;
+  const filter = searchText == null ? {} : { $or:[
+                                                  { $text: { $search: searchText } },
+                                                  { name: { $regex: searchText, $options: 'i' } }
+                                                ]};
+
+  // get current page
+  let page = parseInt(req.query.page) || 1;
+  page = page < 0 ? 1 : page;
+  page = page > lastPage ? lastPage : page;
+  
+
+  const productPromise = productModel.list(filter, 
+                                            searchText == null ? page - 1 : 0,
+                                            searchText == null ? PRODUCT_PER_PAGE : 0);
+
+  const listBrand = await brandPromise;
+  const listCategory = await categoryPromise;
+  const listProduct = await productPromise;
+
+  listProduct.map(product => {
+      product.brand = listBrand.find(brand => brand._id.equals(product.brand)).name;
+      product.category = listCategory.find(category => category._id.equals(product.category)).name;
+      return product; 
+  });
+
+  res.render('product/index', { 
+    title: 'Products',
+    listProduct,
+    listCategory,
+    listBrand,
+    pageLink: '/product',
+    page,
+    lastPage,
+    previousPage: page - 1,
+    nextPage: page + 1,
+    havePreviousPage: page > 1 && searchText == null,
+    haveNextPage: page < lastPage && searchText == null
+  });
 }
 
 module.exports.get_delete = async (req, res, next) => {

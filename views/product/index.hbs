@@ -1,11 +1,14 @@
 
 <div id="content">
   <div id="content-header">
-    <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <span>>></span> <a href="#" class="current">Product</a> </div>
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">/</span></li>
+      <li class="active"><a href="{{pageLink}}">{{title}}</a></li>
+    </ul>
     <div class="row-fluid">
-      <div class="span6" ><h1>Products</h1></div>
+      <div class="span6" ><h1>{{title}}</h1></div>
       <div class="span6" style="margin-top: 50px;text-align:end">
-      <a href="/product/add" class="btn btn-success align-items-end" style="margin-right: 20px;width: 50px;height: 20px">
+      <a href="/product/add" class="btn btn-success align-items-end" style="margin-right: 40px;width: 50px;height: 20px">
         <div class="row">
           <div class="span6">
             <i style="font-size: 21px;padding-left:10px; margin-left:15px" class="material-icons">&#xE147;</i> 
@@ -21,55 +24,62 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span12">
-        <div class="widget-box d-flex flex-row">
-          <div class="widget-title"> <span class="icon  "><i class="icon-th"></i></span>
-            <h5>Data</h5>
-          </div>
-          <div class="widget-content nopadding">
-            <div class="table-responsive">
-              <table class="table table-bordered data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Discount</th>
-                  <th>Brand</th>
-                  <th>Category</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each listProduct}}
-                <tr class="gradeA">
-                  <td>{{name}}</td>
-                  <td>{{description}}</td>
-                  <td>{{price}}</td>
-                  <td>{{discount}}</td>
-                  <td>{{brand}}</td>
-                  <td>{{category}}</td>
-                  <td>
-                    <div style="text-align: center;">
-                      <a href="product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                      <a href="product/delete/{{_id}}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>     
-                    </div>
-                  </td>
-                </tr>
-                {{/each}}
-              </tbody>
-              </table>
+        <div class="widget-content nopadding">
+          <div class="table-responsive">
+            <div class="search-bar">
+              <form action="{{pageLink}}" method="GET" class="form-search">
+                <input type="text" class="input-medium search-query" name="name">
+                <button type="submit" class="btn">Search</button>
+              </form>
             </div>
+            <table class="table table-bordered table-striped table-hover data-table">
+            <thead>
+              <tr>
+                <th style="border: 1px solid #ddd;padding:10px">Name</th>
+                <th style="border: 1px solid #ddd;padding:10px">Description</th>
+                <th style="border: 1px solid #ddd;padding:10px">Price</th>
+                <th style="border: 1px solid #ddd;padding:10px">Discount</th>
+                <th style="border: 1px solid #ddd;padding:10px">Brand</th>
+                <th style="border: 1px solid #ddd;padding:10px">Category</th>
+                <th style="border: 1px solid #ddd;padding:10px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each listProduct}}
+              <tr class="gradeA">
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+                <td>{{price}}</td>
+                <td>{{discount}}</td>
+                <td>{{brand}}</td>
+                <td>{{category}}</td>
+                <td>
+                  <div style="text-align: center;">
+                    <a href="product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                    <a href="product/delete/{{_id}}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>     
+                  </div>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+            </table>
             <div class="span12">
-              <div class="pagination pagination-right">
-                <ul>
-                  <li><a href="#">Prev</a></li>
-                  <li><a href="#">Prev</a></li>
-                  <li><a href="#">Prev</a></li>
-                  <li><a href="#">Prev</a></li>
-                  <li><a href="#">Prev</a></li>
-                </ul>
-              </div>
+            <div class="pagination pagination-right">
+              <ul>
+                {{#if havePreviousPage}}
+                <li><a href="{{pageLink}}?page=1">First</a></li>
+                <li><a href="{{pageLink}}?page={{previousPage}}">{{previousPage}}</a></li>
+                {{/if}}
+
+                <li class="active"><a href="#">{{page}}</a></li>
+
+                {{#if haveNextPage}}
+                <li><a href="{{pageLink}}?page={{nextPage}}">{{nextPage}}</a></li>
+                <li><a href="{{pageLink}}?page={{lastPage}}">Last</a></li>
+                {{/if}}
+              </ul>
             </div>
+          </div>
           </div>
         </div>
       </div>

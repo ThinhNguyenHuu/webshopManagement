@@ -24,3 +24,26 @@ module.exports.destroy = (id) => {
     });
   });
 }
+
+module.exports.uploadFiles = async (files) => {
+  const sources = [];
+  if (Array.isArray(files)) {
+      for (const file of files) {
+          const uploaded = await upload(file.tempFilePath);
+          sources.push(uploaded);
+          fs.unlinkSync(file.tempFilePath);
+      }
+  } else {
+      const uploaded = await upload(files.tempFilePath);
+      sources.push(uploaded);
+      fs.unlinkSync(files.tempFilePath);
+  }
+
+  return sources;
+}
+
+module.exports.destroyFiles = async (sources) => {
+  for (source of sources) {
+      cloudinary.destroy(source.id);
+  }
+}

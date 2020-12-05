@@ -3,19 +3,24 @@ const ObjectId = require('mongodb').ObjectId;
 const cloudinary = require('../cloudinary');
 const fs = require('fs');
 
-module.exports.list = async () => await db().collection('product').find().toArray();
+module.exports.list = async (filter, pageIndex, itemPerPage) => {
+    return await db().collection('product').find(filter, {
+        skip: itemPerPage * pageIndex,
+        limit: itemPerPage
+    }).toArray();
+}
 
 module.exports.delete = async (id) => {
     const collection = db().collection('product');
     const product = await collection.findOne({ _id: ObjectId(id) });
     const deletePromise = collection.deleteOne({ _id: ObjectId(id) });
     
-    await destroyFiles(product.images_sources);
+    await cloudinary.destroyFiles(product.images_sources);
     await deletePromise;
 }
 
 module.exports.add = async (body, files) => {   
-    const sources = await uploadFiles(files);
+    const sources = await cloudinary.uploadFiles(files);
 
     await db().collection('product').insertOne({
         name: body.name, 
@@ -34,8 +39,8 @@ module.exports.update = async (data, files, id) => {
 
     let sources = null;
     if (files) {
-        const destroyPromise = destroyFiles(product[0].images_sources);
-        const new_sources = await uploadFiles(files);
+        const destroyPromise = cloudinary.destroyFiles(product[0].images_sources);
+        const new_sources = await cloudinary.uploadFiles(files);
         await destroyPromise;
         sources = [...new_sources];
     }
@@ -53,26 +58,22 @@ module.exports.update = async (data, files, id) => {
 
 module.exports.findOne = async (options) => await db().collection('product').findOne(options);
 
+module.exports.count = async () => await db().collection('product').count();
 
-const uploadFiles = async (files) => {
-    const sources = [];
-    if (Array.isArray(files)) {
-        for (const file of files) {
-            const uploaded = await cloudinary.upload(file.tempFilePath);
-            sources.push(uploaded);
-            fs.unlinkSync(file.tempFilePath);
-        }
-    } else {
-        const uploaded = await cloudinary.upload(files.tempFilePath);
-        sources.push(uploaded);
-        fs.unlinkSync(files.tempFilePath);
-    }
+module.exports.countInCategory = async (categoryId) => {
+    const result = await db().collection('product').aggregate([
+        { $match: { _id: ObjectId(categoryId) } },
+        { $count: 'count' }
+    ]);
 
-    return sources;
+    return result.count;
 }
 
-const destroyFiles = async (sources) => {
-    for (source of sources) {
-        cloudinary.destroy(source.id);
-    }
+module.exports.countInBrand = async (brandId) => {
+    const result = await db().collection('product').aggregate([
+        { $match: { _id: ObjectId(brandId) } },
+        { $count: 'count' }
+    ]);
+
+    return result.count;
 }
