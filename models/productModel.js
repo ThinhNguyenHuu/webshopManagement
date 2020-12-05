@@ -29,69 +29,8 @@ module.exports.add = async (body, files) => {
     });
 }
 
-module.exports.update = async (body, files, id) => {
-    const product = await db().collection('product').find({_id: ObjectId(id)}).toArray();
-
-    let name;
-    let images_sources;
-    let price;
-    let discount;
-    let description;
-
-    if(body.name !== "")
-        name = body.name;
-    else
-        name = product[0].name;
-
-    /*
-    if(body.image !== "")
-        images_sources = body.images;
-    else
-        images_sources = product[0].images_sources[0];
-    */
-
-    if(body.price !== "")
-        price = body.price;
-    else
-        price = product[0].price;
-
-    if(body.discount !== "")
-        discount = body.discount;
-    else
-        discount = product[0].discount;
-
-    if(body.description !== "")
-        description = body.description;
-    else
-        description = product[0].description;
-
-    
-    //let category
-    // let idCategory;
-    // if(body.category !== "")
-    // {
-    //     category =  await db().collection('category').find({name: body.category}).toArray();
-    //     idCategory = category[0]._id;
-    // }
-    // else
-    // {
-    //     idCategory = product[0].category;
-    // }
-
-    //let brand
-    // let idBrand;
-    // if(body.brand !== "")
-    // {
-    //     brand =  await db().collection('brand').find({name: body.brand}).toArray();
-    //     idBrand = brand[0]._id;
-    // }
-    // else
-    // {
-    //     idBrand = product[0].brand;
-    // }
-
-    const brand = body.brand;
-    const category = body.category;
+module.exports.update = async (data, files, id) => {
+    const product = await db().collection('product').findOne({_id: id});
 
     let sources = null;
     if (files) {
@@ -102,13 +41,13 @@ module.exports.update = async (body, files, id) => {
     }
 
     await db().collection('product').updateOne( {_id: ObjectId(id)} ,{$set: {
-        name: name, 
-        price: price,
-        images_sources: sources ? sources : product[0].images_sources, 
-        discount: discount, 
-        description: description, 
-        brand: ObjectId(brand), 
-        category: ObjectId(category)
+        name: data.name || product.name, 
+        price: data.price || product.price,
+        images_sources: sources || product.images_sources, 
+        discount: data.discount || product.discount, 
+        description: data.description || product.description, 
+        brand: ObjectId(data.brand), 
+        category: ObjectId(data.category)
     }}, null);
 }
 
