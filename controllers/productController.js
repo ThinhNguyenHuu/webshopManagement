@@ -4,7 +4,7 @@ const categoryModel = require('../models/categoryModel');
 const { ObjectId } = require('mongodb');
 const db = require('../db');
 
-const PRODUCT_PER_PAGE = 5;
+const PRODUCT_PER_PAGE = 8;
 
 module.exports.index = async (req, res, next) => {
 
@@ -48,6 +48,7 @@ module.exports.index = async (req, res, next) => {
     listCategory,
     listBrand,
     pageLink: '/product',
+    searchText,
     page,
     lastPage,
     previousPage: page - 1,

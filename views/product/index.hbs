@@ -37,7 +37,7 @@
                   {{/each}}
                 </select>
                 {{/strInclude}}
-                <input type="text" class="input-medium search-query" name="name">
+                <input type="text" class="input-medium search-query" name="name" value="{{searchText}}">
                 <button type="submit" class="btn">Search</button>
               </form>
             </div>
@@ -76,15 +76,15 @@
             <div class="pagination pagination-right">
               <ul>
                 {{#if havePreviousPage}}
-                <li><a href="{{pageLink}}?page=1&brand={{brandId}}">First</a></li>
-                <li><a href="{{pageLink}}?page={{previousPage}}&brand={{brandId}}">{{previousPage}}</a></li>
+                <li><a href="{{pageLink}}?page=1&name={{searchText}}&brand={{brandId}}">First</a></li>
+                <li><a href="{{pageLink}}?page={{previousPage}}&name={{searchText}}&brand={{brandId}}">{{previousPage}}</a></li>
                 {{/if}}
 
                 <li class="active"><a href="#">{{page}}</a></li>
 
                 {{#if haveNextPage}}
-                <li><a href="{{pageLink}}?page={{nextPage}}&brand={{brandId}}">{{nextPage}}</a></li>
-                <li><a href="{{pageLink}}?page={{lastPage}}&brand={{brandId}}">Last</a></li>
+                <li><a href="{{pageLink}}?page={{nextPage}}&name={{searchText}}&brand={{brandId}}">{{nextPage}}</a></li>
+                <li><a href="{{pageLink}}?page={{lastPage}}&name={{searchText}}&brand={{brandId}}">Last</a></li>
                 {{/if}}
               </ul>
             </div>

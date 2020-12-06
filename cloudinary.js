@@ -1,9 +1,9 @@
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-  cloud_name: 'webshopimages',
-  api_key: '657162753779718',
-  api_secret: 'E0cGXsMiMZ3_sJqM_yowGVr6gww'
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
 module.exports.upload = (file) => {
