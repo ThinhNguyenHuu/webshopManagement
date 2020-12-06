@@ -1,6 +1,6 @@
 const {MongoClient} = require('mongodb');
-const URI = 'mongodb+srv://dbwebshop:dbwebshop@clusterwebshop.4x1ob.mongodb.net/<dbname>?retryWrites=true&w=majority';
-const dbName = 'webshop';
+const URI = process.env.DB_URI;
+const dbName = process.env.DB_NAME;
 
 
 let client = null;
