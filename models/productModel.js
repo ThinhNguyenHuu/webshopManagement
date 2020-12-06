@@ -1,5 +1,6 @@
 const {db} = require('../db');
 const ObjectId = require('mongodb').ObjectId;
+const Double = require('mongodb').Double;
 const cloudinary = require('../cloudinary');
 const fs = require('fs');
 
@@ -25,8 +26,8 @@ module.exports.add = async (body, files) => {
     await db().collection('product').insertOne({
         name: body.name, 
         images_sources: sources, 
-        price: body.price, 
-        discount: body.discount, 
+        price: Double(body.price), 
+        discount: Double(body.discount), 
         description: body.description, 
         brand: ObjectId(body.brand), 
         category: ObjectId(body.category),
@@ -46,13 +47,13 @@ module.exports.update = async (data, files, id) => {
     }
 
     await db().collection('product').updateOne( {_id: ObjectId(id)} ,{$set: {
-        name: data.name || product.name, 
-        price: data.price || product.price,
-        images_sources: sources || product.images_sources, 
-        discount: data.discount || product.discount, 
-        description: data.description || product.description, 
-        brand: ObjectId(data.brand), 
-        category: ObjectId(data.category)
+        name: name, 
+        price: Double(price),
+        images_sources: sources ? sources : product[0].images_sources, 
+        discount: Double(discount), 
+        description: description, 
+        brand: ObjectId(brand), 
+        category: ObjectId(category)
     }}, null);
 }
 
