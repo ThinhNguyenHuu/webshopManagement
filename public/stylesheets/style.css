@@ -59,10 +59,6 @@
 	overflow-x: scroll;
 }
 
-.main-data-table td, th {
-	max-width: 400px;
-}
-
 .img-details-thumbnail {
 	width: 200px;
 	height: 200px;
@@ -70,4 +66,36 @@
 	border: 2px solid #e5e6e6;
 	padding: 5px;
 	object-fit: cover;
+}
+
+.col-name {
+	min-width: 150px;
+}
+
+.col-description {
+	min-width: 250px;
+}
+
+.col-price {
+	min-width: 80px;
+}
+
+.col-discount {
+	min-width: 50px;
+}
+
+.col-brand {
+	min-width: 80px;
+}
+
+.col-category {
+	min-width: 80px;
+}
+
+.col-images {
+	min-width: 170px;
+}
+
+.col-action {
+	min-width: 50px;
 }
