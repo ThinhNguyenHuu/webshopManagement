@@ -41,7 +41,7 @@
                 <button type="submit" class="btn">Search</button>
               </form>
             </div>
-            <table class="table table-bordered table-striped table-hover data-table">
+            <table class="table table-bordered table-striped table-hover data-table main-data-table">
             <thead>
               <tr>
                 <th style="border: 1px solid #ddd;padding:10px">Name</th>
@@ -50,6 +50,7 @@
                 <th style="border: 1px solid #ddd;padding:10px">Discount</th>
                 <th style="border: 1px solid #ddd;padding:10px">Brand</th>
                 <th style="border: 1px solid #ddd;padding:10px">Category</th>
+                <th style="border: 1px solid #ddd;padding:10px">Images</th>
                 <th style="border: 1px solid #ddd;padding:10px">Action</th>
               </tr>
             </thead>
@@ -62,6 +63,13 @@
                 <td>{{discount}}</td>
                 <td>{{brand}}</td>
                 <td>{{category}}</td>
+                <td>
+                  {{#each images_sources}}
+                  <a href="{{this.url}}" target="_blank">
+                    <img class="img-list-thumbnail" src="{{this.url}}" alt="product-image">
+                  </a>
+                  {{/each}}
+                </td>
                 <td>
                   <div style="text-align: center;">
                     <a href="/product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>

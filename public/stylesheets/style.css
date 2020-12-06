@@ -35,3 +35,36 @@
 	display: none;
 }
 
+.img-list-thumbnail {
+	width: 30px;
+	height: 30px;
+  display: inline-block;
+	border: 2px solid #e5e6e6;
+	padding: 3px;
+	object-fit: cover;
+}
+
+.main-data-table {
+	overflow-x: scroll;
+	display: block;
+	width: 100%;
+}
+
+.main-data-table tbody {
+	overflow-y: scroll;
+	overflow-x: scroll;
+	height: 140px;
+}
+
+.main-data-table td, th {
+	max-width: 300px;
+}
+
+.img-details-thumbnail {
+	width: 200px;
+	height: 200px;
+  display: inline-block;
+	border: 2px solid #e5e6e6;
+	padding: 5px;
+	object-fit: cover;
+}
