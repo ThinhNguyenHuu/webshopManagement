@@ -50,7 +50,9 @@
     <li class="submenu"> <a href="#"><i class="icon icon-th"></i> <span>Categories</span></a>
       <ul>
         {{#each listCategory}}
-        <li><a href="/category/{{_id}}">{{name}}</a></li>
+        <div class="sidebar-category">
+          <li><a href="/category/{{_id}}">{{name}}</a></li>
+        </div>
         {{/each}}
       </ul>
     </li>

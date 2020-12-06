@@ -11,12 +11,6 @@ module.exports.index = async (req, res, next) => {
   const brandPromise = brandModel.list();
   const categoryPromise = categoryModel.list();
 
-  // get product count
-  const count = await productModel.count();
-
-  // get last page index
-  const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
-
   // get search
   const searchText = req.query.name || null;
   const filter = searchText == null ? {} : { $or:[
@@ -24,15 +18,19 @@ module.exports.index = async (req, res, next) => {
                                                   { name: { $regex: searchText, $options: 'i' } }
                                                 ]};
 
+  // get count
+  const count = await productModel.count(filter);
+
+  // get last page
+  const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
+
   // get current page
   let page = parseInt(req.query.page) || 1;
   page = page < 0 ? 1 : page;
   page = page > lastPage ? lastPage : page;
   
 
-  const productPromise = productModel.list(filter, 
-                                            searchText == null ? page - 1 : 0,
-                                            searchText == null ? PRODUCT_PER_PAGE : 0);
+  const productPromise = productModel.list(filter, page - 1, PRODUCT_PER_PAGE);
 
   const listBrand = await brandPromise;
   const listCategory = await categoryPromise;
@@ -54,8 +52,8 @@ module.exports.index = async (req, res, next) => {
     lastPage,
     previousPage: page - 1,
     nextPage: page + 1,
-    havePreviousPage: page > 1 && searchText == null,
-    haveNextPage: page < lastPage && searchText == null
+    havePreviousPage: page > 1,
+    haveNextPage: page < lastPage
   });
 }
 

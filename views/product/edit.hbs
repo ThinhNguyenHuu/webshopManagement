@@ -43,7 +43,7 @@
               <div class="controls">
                 <select class="span9" id="brand" name="brand">
                   {{#each listBrand}}
-									<option value="{{_id}}" {{#ifEquals _id ../product.brand }}selected="selected"{{/ifEquals}}>{{name}}</option>
+									<option value="{{_id}}" {{#idEquals _id ../product.brand }}selected="selected"{{/idEquals}}>{{name}}</option>
 									{{/each}}
                 </select>
               </div>	
@@ -53,7 +53,7 @@
               <div class="controls">
                 <select class="span9" id="category" name="category">
                   {{#each listCategory}}
-									<option value="{{_id}}" {{#ifEquals _id ../product.category }}selected="selected"{{/ifEquals}}>{{name}}</option>
+									<option value="{{_id}}" {{#idEquals _id ../product.category }}selected="selected"{{/idEquals}}>{{name}}</option>
 									{{/each}}
                 </select>
               </div>

@@ -14,34 +14,27 @@ module.exports.index = async (req, res, next) => {
   const listCategory = await categoryPromise;
   const category = listCategory.find(category => category._id.equals(ObjectId(req.params._id)));
 
+  // get search text
+  const searchText = req.query.name || null;
+  
+  // get brand id
+  const brandId = req.query.brand || 'All';
+
+  // get filter
+  const filter = getFilter(searchText, brandId, category);
+
   // get product in category count
-  const count = await productModel.countInCategory(category._id);
+  const count = await productModel.count(filter);
 
   // get last page index
   const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
-
-  // get search text
-  const searchText = req.query.name || null;
-  const filter = searchText == null ? 
-    { category: ObjectId(category._id) } : 
-    {
-      $and: [
-        { category: ObjectId(category._id) },
-        { $or: [
-          { $text: { $search: searchText } },
-          { name: { $regex: searchText, $options: 'i' } }
-        ]}
-      ]
-    };
 
   // get page
   let page = req.query.page || 1;
   page = page < 0 ? 1 : page;
   page = page > lastPage ? lastPage : page;
 
-  const productPromise = productModel.list(filter, 
-                                            searchText == null ? page - 1 : 0,
-                                            searchText == null ? PRODUCT_PER_PAGE : 0);
+  const productPromise = productModel.list(filter, page - 1, PRODUCT_PER_PAGE);
 
   const listBrand = await brandPromise;
   const listProduct = await productPromise;
@@ -52,8 +45,19 @@ module.exports.index = async (req, res, next) => {
       return product; 
   });
 
+  // get list brand in category
+  const listBrandInCategory = listBrand.filter(brand => {
+    for (const item of brand.category) {
+      if (item.equals(category._id)) return true;
+    }
+    return false;
+  });
+
   res.render('product/index', { 
     title: category.name,
+    category,
+    brandId,
+    listBrandInCategory,
     listProduct,
     listCategory,
     listBrand,
@@ -62,7 +66,29 @@ module.exports.index = async (req, res, next) => {
     lastPage,
     previousPage: page - 1,
     nextPage: page + 1,
-    havePreviousPage: page > 1 && searchText == null,
-    haveNextPage: page < lastPage && searchText == null
+    havePreviousPage: page > 1,
+    haveNextPage: page < lastPage
   });
+}
+
+const getFilter = (searchText, brandId, category) => {
+
+  const filter = { $and: [ {category: ObjectId(category._id)} ] };
+
+  // if searchText != null
+  if(searchText != null) {
+    filter.$and.push({
+      $or: [
+        { $text: { $search: searchText } },
+        { name: { $regex: searchText, $options: 'i' } }
+      ]
+    })
+  }
+
+  // if id != 'All'
+  if (ObjectId.isValid(brandId)) {
+    filter.$and.push({ brand: ObjectId(brandId) });
+  }
+
+  return filter;
 }

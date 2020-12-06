@@ -24,10 +24,19 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span12">
-        <div class="widget-content nopadding">
+        <div class="widget-content nopadding">  
           <div class="table-responsive">
             <div class="search-bar">
               <form action="{{pageLink}}" method="GET" class="form-search">
+                {{#strInclude pageLink "/category/" }}
+                <label for="brand">Brand</label>
+                <select id="brand" name="brand">
+                  <option value="All" selected>All</option>
+                  {{#each listBrandInCategory}}
+                  <option value={{_id}} {{#idEquals _id ../brandId}}selected{{/idEquals}}>{{name}}</option>
+                  {{/each}}
+                </select>
+                {{/strInclude}}
                 <input type="text" class="input-medium search-query" name="name">
                 <button type="submit" class="btn">Search</button>
               </form>
@@ -67,15 +76,15 @@
             <div class="pagination pagination-right">
               <ul>
                 {{#if havePreviousPage}}
-                <li><a href="{{pageLink}}?page=1">First</a></li>
-                <li><a href="{{pageLink}}?page={{previousPage}}">{{previousPage}}</a></li>
+                <li><a href="{{pageLink}}?page=1&brand={{brandId}}">First</a></li>
+                <li><a href="{{pageLink}}?page={{previousPage}}&brand={{brandId}}">{{previousPage}}</a></li>
                 {{/if}}
 
                 <li class="active"><a href="#">{{page}}</a></li>
 
                 {{#if haveNextPage}}
-                <li><a href="{{pageLink}}?page={{nextPage}}">{{nextPage}}</a></li>
-                <li><a href="{{pageLink}}?page={{lastPage}}">Last</a></li>
+                <li><a href="{{pageLink}}?page={{nextPage}}&brand={{brandId}}">{{nextPage}}</a></li>
+                <li><a href="{{pageLink}}?page={{lastPage}}&brand={{brandId}}">Last</a></li>
                 {{/if}}
               </ul>
             </div>

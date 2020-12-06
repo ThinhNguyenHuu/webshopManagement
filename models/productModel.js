@@ -58,22 +58,4 @@ module.exports.update = async (data, files, id) => {
 
 module.exports.findOne = async (options) => await db().collection('product').findOne(options);
 
-module.exports.count = async () => await db().collection('product').count();
-
-module.exports.countInCategory = async (categoryId) => {
-    const result = await db().collection('product').aggregate([
-        { $match: { _id: ObjectId(categoryId) } },
-        { $count: 'count' }
-    ]);
-
-    return result.count;
-}
-
-module.exports.countInBrand = async (brandId) => {
-    const result = await db().collection('product').aggregate([
-        { $match: { _id: ObjectId(brandId) } },
-        { $count: 'count' }
-    ]);
-
-    return result.count;
-}
+module.exports.count = async (filter) => await db().collection('product').countDocuments(filter);

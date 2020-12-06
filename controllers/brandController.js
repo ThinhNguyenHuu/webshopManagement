@@ -14,12 +14,6 @@ module.exports.index = async (req, res, next) => {
   const listBrand = await brandPromise;
   const brand = listBrand.find(brand => brand._id.equals(ObjectId(req.params._id)));
 
-  // get product in category count
-  const count = await productModel.countInBrand(brand._id);
-
-  // get last page index
-  const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
-
   // get search text
   const searchText = req.query.name || null;
   const filter = searchText == null ? 
@@ -34,14 +28,18 @@ module.exports.index = async (req, res, next) => {
       ]
     };
 
+  // get product in category count
+  const count = await productModel.count(filter);
+
+  // get last page index
+  const lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
+
   // get page
   let page = req.query.page || 1;
   page = page < 0 ? 1 : page;
   page = page > lastPage ? lastPage : page;
 
-  const productPromise = productModel.list(filter, 
-                                            searchText == null ? page - 1 : 0,
-                                            searchText == null ? PRODUCT_PER_PAGE : 0);
+  const productPromise = productModel.list(filter, page - 1, PRODUCT_PER_PAGE);
 
   const listCategory = await categoryPromise;
   const listProduct = await productPromise;
@@ -62,7 +60,7 @@ module.exports.index = async (req, res, next) => {
     lastPage,
     previousPage: page - 1,
     nextPage: page + 1,
-    havePreviousPage: page > 1 && searchText == null,
-    haveNextPage: page < lastPage && searchText == null
+    havePreviousPage: page > 1,
+    haveNextPage: page < lastPage
   });
 }
