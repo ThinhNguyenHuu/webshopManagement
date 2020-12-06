@@ -51,9 +51,12 @@
 }
 
 .main-data-table tbody {
-	overflow-y: scroll;
 	overflow-x: scroll;
 	height: 140px;
+}
+
+.main-data-table thead {
+	overflow-x: scroll;
 }
 
 .main-data-table td, th {
