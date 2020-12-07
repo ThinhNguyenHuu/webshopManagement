@@ -8,7 +8,7 @@ module.exports.list = async (filter, pageIndex, itemPerPage) => {
     return await db().collection('product').find(filter, {
         skip: itemPerPage * pageIndex,
         limit: itemPerPage
-    }).toArray();
+    }).sort({_id: -1}).toArray();
 }
 
 module.exports.delete = async (id) => {
@@ -57,6 +57,6 @@ module.exports.update = async (data, files, id) => {
     }}, null);
 }
 
-module.exports.findOne = async (options) => await db().collection('product').findOne(options);
+module.exports.findOne = async (filter) => await db().collection('product').findOne(filter);
 
 module.exports.count = async (filter) => await db().collection('product').countDocuments(filter);
