@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const fileupload = require('express-fileupload');
 const hbs = require('hbs');
 
+const authRouter = require('./routes/auth');
 const indexRouter = require('./routes/index');
 const productRouter = require('./routes/product');
 const categoryRouter = require('./routes/category');
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/auth', authRouter);
 app.use('/', indexRouter);
 app.use('/product', productRouter);
 app.use('/category', categoryRouter);
