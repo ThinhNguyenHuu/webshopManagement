@@ -43,7 +43,7 @@ module.exports.index = async (req, res, next) => {
   });
 
   res.render('product/index', { 
-    title: 'Products',
+    title: 'Sản phẩm',
     listProduct,
     listCategory,
     listBrand,

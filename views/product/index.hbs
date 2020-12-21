@@ -14,7 +14,7 @@
             <i style="font-size: 21px;padding-left:10px; margin-left:15px" class="material-icons">&#xE147;</i> 
           </div>
           <div class="span6">
-            <span style="box-sizing: border-box;margin-left:5px">Add</span>
+            <span style="box-sizing: border-box;margin-left:5px">Thêm</span>
           </div>
         </div>
       </a>
@@ -29,29 +29,29 @@
             <div class="search-bar">
               <form action="{{pageLink}}" method="GET" class="form-search">
                 {{#strInclude pageLink "/category/" }}
-                <label for="brand">Brand</label>
+                <label for="brand">Thương hiệu</label>
                 <select id="brand" name="brand">
-                  <option value="All" selected>All</option>
+                  <option value="All" selected>Tất cả</option>
                   {{#each listBrandInCategory}}
                   <option value={{_id}} {{#idEquals _id ../brandId}}selected{{/idEquals}}>{{name}}</option>
                   {{/each}}
                 </select>
                 {{/strInclude}}
                 <input type="text" class="input-medium search-query" name="name" value="{{searchText}}">
-                <button type="submit" class="btn">Search</button>
+                <button type="submit" class="btn">Tìm</button>
               </form>
             </div>
             <table class="table table-bordered table-striped table-hover data-table main-data-table">
             <thead>
               <tr>
-                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Name</th>
-                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Description</th>
-                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Price</th>
-                <th class="col-discount" style="border: 1px solid #ddd;padding:10px">Discount</th>
-                <th class="col-brand" style="border: 1px solid #ddd;padding:10px">Brand</th>
-                <th class="col-category" style="border: 1px solid #ddd;padding:10px">Category</th>
-                <th class="col-images" style="border: 1px solid #ddd;padding:10px">Images</th>
-                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Action</th>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Chú thích</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Giá</th>
+                <th class="col-discount" style="border: 1px solid #ddd;padding:10px">Giảm giá</th>
+                <th class="col-brand" style="border: 1px solid #ddd;padding:10px">Thương hiệu</th>
+                <th class="col-category" style="border: 1px solid #ddd;padding:10px">Loại</th>
+                <th class="col-images" style="border: 1px solid #ddd;padding:10px">Hình ảnh</th>
+                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chỉnh sửa</th>
               </tr>
             </thead>
             <tbody>

@@ -8,12 +8,17 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const fileupload = require('express-fileupload');
 const hbs = require('hbs');
+const session = require('express-session');
 
+const passport = require('./passport/index');
 const authRouter = require('./routes/auth');
 const indexRouter = require('./routes/index');
 const productRouter = require('./routes/product');
 const categoryRouter = require('./routes/category');
 const brandRouter = require('./routes/brand');
+const userRouter = require('./routes/user');
+const orderRouter = require('./routes/order');
+const {ensureAuthenticated} = require('./middlewares/authenticationMiddlewares');
 
 const app = express();
 
@@ -37,11 +42,29 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Passport middlewares
+app.use(session({ 
+  secret: 'cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Pass req.user to res.locals
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+// Routes
 app.use('/auth', authRouter);
-app.use('/', indexRouter);
-app.use('/product', productRouter);
-app.use('/category', categoryRouter);
-app.use('/brand', brandRouter);
+app.use('/', ensureAuthenticated, indexRouter);
+app.use('/product', ensureAuthenticated, productRouter);
+app.use('/category', ensureAuthenticated, categoryRouter);
+app.use('/brand', ensureAuthenticated, brandRouter);
+app.use('/user', ensureAuthenticated, userRouter);
+app.use('/order', ensureAuthenticated, orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

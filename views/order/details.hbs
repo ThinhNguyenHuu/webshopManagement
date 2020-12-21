@@ -1,0 +1,97 @@
+
+<div id="content">
+  <div id="content-header">
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">/</span></li>
+      <li class="active"><a href="{{pageLink}}">{{title}}</a></li>
+    </ul>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="row-fluid user-infos myUsername">
+
+          <!-- User information -->
+          <div class="span8 offset1">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">Chi tiết đơn đặt hàng</h3>
+              </div>
+              <div class="panel-body">
+                <div class="row-fluid" style="margin: 0;">
+                  <div class="span10">
+                    <table class="table table-condensed table-responsive table-user-information">
+                      <tbody>
+                      <tr>
+                          <td><strong>Tên khách hàng</strong></td>
+                          <td>{{order.user.fullname}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Số điện thoại</strong></td>
+                          <td>{{order.phone_number}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Địa chỉ</strong></td>
+                          <td>{{order.address}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Ngày giao</strong></td>
+                          <td>{{order.date}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Tổng giá</strong></td>
+                          <td>{{order.total_price}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Tình trạng</strong></td>
+                          <td>{{order.status}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-content nopadding">  
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover data-table">
+            <thead>
+              <tr>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên sản phẩm</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Giá</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Khuyến mãi</th>
+                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Số lượng</th>
+                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each order.ordered_products}}
+                <tr class="gradeA">
+                  <td><strong>{{product.name}}</strong></td>
+                  <td>{{product.price}}</td>
+                  <td>{{product.discount}}</td>
+                  <td>{{quantity}}</td>
+                  <td>{{final_price}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

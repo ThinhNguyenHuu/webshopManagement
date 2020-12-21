@@ -1,0 +1,77 @@
+
+<div id="content">
+  <div id="content-header">
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">/</span></li>
+      <li class="active"><a href="{{pageLink}}">{{title}}</a></li>
+    </ul>
+    <div class="row-fluid">
+      <div class="span6" ><h1>{{title}}</h1></div>
+      <div class="span6" style="margin-top: 50px;text-align:end"></div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-content nopadding">  
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover data-table">
+            <thead>
+              <tr>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Khách hàng</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Sđt</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Địa chỉ</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Sản phẩm</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Ngày giao</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Tổng giá</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Tình trạng</th>
+                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chi tiết</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each listOrder}}
+                <tr class="gradeA">
+                  <td><strong><a href="/user/{{user._id}}">{{user.fullname}}</a></strong></td>
+                  <td>{{phone_number}}</td>
+                  <td>{{address}}</td>
+                  {{#each ordered_products}}
+
+                  {{/each}}
+                  <td>{{date}}</td>
+                  <td>{{totalPrice}}</td>
+                  <td>{{status}}</td>
+                  <td>
+                    <div style="text-align: center;">
+                      <a href="/order/{{_id}}" class="details"><i class="material-icons" data-toggle="tooltip" title="Details">&#xE88E;</i></a> 
+                    </div>
+                  </td>
+                </tr>   
+              {{/each}}
+            </tbody>
+            </table>
+            <div class="span12">
+            <div class="pagination pagination-right">
+              <ul>
+                {{#if havePreviousPage}}
+                <li><a href="{{pageLink}}?page=1">First</a></li>
+                <li><a href="{{pageLink}}?page={{previousPage}}">{{previousPage}}</a></li>
+                {{/if}}
+
+                <li class="active"><a href="#">{{page}}</a></li>
+
+                {{#if haveNextPage}}
+                <li><a href="{{pageLink}}?page={{nextPage}}">{{nextPage}}</a></li>
+                <li><a href="{{pageLink}}?page={{lastPage}}">Last</a></li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
