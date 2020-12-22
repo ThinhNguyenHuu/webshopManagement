@@ -190,3 +190,12 @@
 .table-user-information > tbody > tr > td {
 	border-top: 0;
 }
+
+.errors-container {
+	width: 50%;
+	margin: 30px 0px -30px 20px;
+}
+
+.require-sign {
+	color: red;
+}

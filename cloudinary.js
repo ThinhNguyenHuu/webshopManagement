@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -29,12 +30,12 @@ module.exports.uploadFiles = async (files) => {
   const sources = [];
   if (Array.isArray(files)) {
       for (const file of files) {
-          const uploaded = await upload(file.tempFilePath);
+          const uploaded = await this.upload(file.tempFilePath);
           sources.push(uploaded);
           fs.unlinkSync(file.tempFilePath);
       }
   } else {
-      const uploaded = await upload(files.tempFilePath);
+      const uploaded = await this.upload(files.tempFilePath);
       sources.push(uploaded);
       fs.unlinkSync(files.tempFilePath);
   }
@@ -44,6 +45,6 @@ module.exports.uploadFiles = async (files) => {
 
 module.exports.destroyFiles = async (sources) => {
   for (source of sources) {
-      cloudinary.destroy(source.id);
+      this.destroy(source.id);
   }
 }

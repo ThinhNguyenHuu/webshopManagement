@@ -10,4 +10,8 @@ router.get('/ban/:_id', controller.ban);
 
 router.get('/unban/:_id', controller.unban);
 
+router.get('/edit/:_id', controller.get_edit);
+
+router.post('/edit/:_id', controller.post_edit);
+
 module.exports = router;

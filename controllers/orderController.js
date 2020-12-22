@@ -14,7 +14,8 @@ module.exports.index = async (req, res, next) => {
   const count = await orderModel.count();
 
   // get last page
-  const lastPage = Math.ceil(count / ORDER_PER_PAGE);
+  let lastPage = Math.ceil(count / ORDER_PER_PAGE);
+  lastPage = lastPage < 1 ? 1 : lastPage;
 
   // get current page
   let page = parseInt(req.query.page) || 1;
@@ -78,8 +79,9 @@ module.exports.details = async (req, res, next) => {
   order.user = await userModel.findOne({_id: ObjectId(order.user)});
   order.ordered_products.map(async (ordered_product) => {
     ordered_product.product = await productModel.findOne({_id: ObjectId(ordered_product.product)});
-    const price = ordered_product.product.price;
-    ordered_product.final_price = (price - price * ordered_product.discount) * ordered_product.quantity;
+    ordered_product.final_price = 
+      (ordered_product.price - ordered_product.price * ordered_product.discount) * ordered_product.quantity;
+      
     return ordered_product;
   });
   order.total_price = order.ordered_products.reduce((a, b) => {

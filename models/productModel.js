@@ -2,7 +2,7 @@ const {db} = require('../db');
 const ObjectId = require('mongodb').ObjectId;
 const Double = require('mongodb').Double;
 const cloudinary = require('../cloudinary');
-const fs = require('fs');
+const bcrypt = require('bcrypt');
 
 module.exports.list = async (filter, pageIndex, itemPerPage) => {
     return await db().collection('product').find(filter, {
@@ -22,7 +22,7 @@ module.exports.delete = async (id) => {
 
 module.exports.add = async (body, files) => {   
     const sources = await cloudinary.uploadFiles(files);
-
+    
     await db().collection('product').insertOne({
         name: body.name, 
         images_sources: sources, 
@@ -36,24 +36,24 @@ module.exports.add = async (body, files) => {
 }
 
 module.exports.update = async (data, files, id) => {
-    const product = await db().collection('product').findOne({_id: id});
+    const product = await db().collection('product').findOne({_id: ObjectId(id)});
 
     let sources = null;
     if (files) {
-        const destroyPromise = cloudinary.destroyFiles(product[0].images_sources);
+        const destroyPromise = cloudinary.destroyFiles(product.images_sources);
         const new_sources = await cloudinary.uploadFiles(files);
         await destroyPromise;
         sources = [...new_sources];
     }
 
     await db().collection('product').updateOne( {_id: ObjectId(id)} ,{$set: {
-        name: name, 
-        price: Double(price),
-        images_sources: sources ? sources : product[0].images_sources, 
-        discount: Double(discount), 
-        description: description, 
-        brand: ObjectId(brand), 
-        category: ObjectId(category)
+        name: data.name, 
+        price: Double(data.price),
+        images_sources: sources ? sources : product.images_sources, 
+        discount: Double(data.discount), 
+        description: data.description, 
+        brand: ObjectId(data.brand), 
+        category: ObjectId(data.category)
     }}, null);
 }
 

@@ -42,17 +42,26 @@
                 </div>
               </div>
               <div class="panel-footer">
-                {{#if user.ban}}
-                <a class="btn btn-warning" type="button"
-                          href="/user/unban/{{user._id}}"
-                          data-toggle="tooltip"
-                          data-original-title="Send message to user">Bỏ chặn</a>
+                {{#if isNotMyAccount}}
+                  {{#if user.ban}}
+                  <a class="btn btn-warning" type="button"
+                            href="/user/unban/{{user._id}}"
+                            data-toggle="tooltip"
+                            data-original-title="Bỏ chặn">Bỏ chặn</a>
+                  {{else}}
+                  <a class="btn btn-danger" type="button"
+                            href="/user/ban/{{user._id}}"
+                            data-toggle="tooltip"
+                            data-original-title="Chặn">Chặn</a>
+                  {{/if}}
+                
                 {{else}}
-                <a class="btn btn-danger" type="button"
-                          href="/user/ban/{{user._id}}"
-                          data-toggle="tooltip"
-                          data-original-title="Send message to user">Chặn</a>
+                <a class="btn btn-success" type="button"
+                            href="/user/edit/{{user._id}}"
+                            data-toggle="tooltip"
+                            data-original-title="Sửa">Sửa</a>
                 {{/if}}
+
               </div>
             </div>
           </div>

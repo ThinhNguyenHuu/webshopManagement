@@ -5,6 +5,16 @@
   <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> </div>
   <h1>Thêm mới sản phẩm</h1>
 </div>
+
+<div class="errors-container">
+  {{#each errors}}
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Lỗi!!</strong> {{this}}
+  </div>
+  {{/each}}
+</div>
+
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span12">
@@ -15,31 +25,31 @@
         <div class="widget-content nopadding">
           <form action="/product/add" method="POST" class="form-horizontal" enctype="multipart/form-data">
             <div class="control-group">
-              <label class="control-label">Tên :</label>
+              <label class="control-label">Tên<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <input type="text" class="span9" id="name" name="name" required/>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Chú thích :</label>
+              <label class="control-label">Chú thích<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <textarea type="text" class="span9" rows="5" id="description" name="description" required ></textarea>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Giá :</label>
+              <label class="control-label">Giá<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <input type="number" class="span9" value="0" id="price" name="price" required/>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Giá giảm :</label>
+              <label class="control-label">Khuyễn mãi<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <input type="number" class="span9" value="0" id="discount" name="discount" required/>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Thương hiệu :</label>
+              <label class="control-label">Thương hiệu<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <select class="span9" id="brand" name="brand">
                   {{#each listBrand}}
@@ -49,7 +59,7 @@
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Loại :</label>
+              <label class="control-label">Loại<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <select class="span9" id="category" name="category">
                   {{#each listCategory}}
@@ -59,7 +69,7 @@
               </div>
             </div>
           <div class="control-group">
-							<label class="control-label">Hình ảnh :</label>
+							<label class="control-label">Hình ảnh<span class="require-sign">*</span> :</label>
               <div class="controls">
                 <input type="file" name="image" id="image" accept="image/*" multiple required/>
               </div>

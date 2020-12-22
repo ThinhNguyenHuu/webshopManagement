@@ -27,7 +27,8 @@ module.exports.index = async (req, res, next) => {
   const count = await productModel.count(filter);
 
   // get last page index
-  const lastPage = count != 0 ? Math.ceil(count / PRODUCT_PER_PAGE) : 1;
+  let lastPage = Math.ceil(count / PRODUCT_PER_PAGE);
+  lastPage = lastPage < 1 ? 1 : lastPage;
 
   // get page
   let page = req.query.page || 1;
