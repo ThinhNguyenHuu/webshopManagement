@@ -10,7 +10,7 @@ passport.use(new LocalStrategy({
   passwordField: 'password'
 }, 
   async function(username, password, done) {
-    const user = await userModel.findOne({email: username});
+    const user = await userModel.findByEmail(username);
 
     if(!user) {
       return done(null, false, { message: 'Người dùng không tồn tại' });
@@ -29,7 +29,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  userModel.findOne({_id: ObjectId(id)}).then(user => {
+  userModel.findOne(id).then(user => {
     done(null, user);
   })
 });

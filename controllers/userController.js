@@ -9,31 +9,19 @@ const USER_PER_PAGE = 8;
 
 module.exports.index = async (req, res, next) => {
 
-  // get count
-  const count = await userModel.count();
-
-  // get last page
-  let lastPage = Math.ceil(count / USER_PER_PAGE);
-  lastPage = lastPage < 1 ? 1 : lastPage;
-
-  // get current page
-  let page = parseInt(req.query.page) || 1;
-  page = page < 0 ? 1 : page;
-  page = page > lastPage ? lastPage : page;
-
-  // get data
-  const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
-    userModel.list(page - 1, USER_PER_PAGE)
-  ]);
-
+  const {
+    listBrand,
+    listCategory,
+    listUser,
+    page,
+    lastPage
+  } = await userModel.list(req.query.page, USER_PER_PAGE);
 
   res.render('user/index', {
     title: 'User',
-    listBrand: result[0],
-    listCategory: result[1],
-    listUser: result[2],
+    listBrand,
+    listCategory,
+    listUser,
     pageLink: '/user',
     page,
     lastPage,
@@ -48,7 +36,7 @@ module.exports.details = async (req, res, next) => {
   const result = await Promise.all([
     categoryModel.list(),
     brandModel.list(),
-    userModel.findOne({_id: ObjectId(req.params._id)})
+    userModel.findOne(req.params._id)
   ]);
 
   res.render('user/details', {
@@ -80,10 +68,10 @@ module.exports.unban = async (req, res, next) => {
 }
 
 module.exports.get_edit = async (req, res, next) => {
-  const result = Promise.all([
+  const result = await Promise.all([
     brandModel.list(),
     categoryModel.list(),
-    userModel.findOne({_id: ObjectId(req.params._id)})
+    userModel.findOne(req.params._id)
   ]);
 
   res.render('user/edit', {
@@ -98,7 +86,7 @@ module.exports.post_edit = async (req, res, next) => {
   if (req.files != null && req.files.image != null)
     file = req.files.image;
 
-  const user = await userModel.findOne({_id: ObjectId(req.params._id)});
+  const user = await userModel.findOne(req.params._id);
 
   // Validation
   const errors = [];
@@ -113,16 +101,15 @@ module.exports.post_edit = async (req, res, next) => {
   }
 
   if (errors.length > 0) {
-    const result = Promise.all([
+    const result = await Promise.all([
       brandModel.list(),
-      categoryModel.list(),
-      userModel.findOne({_id: ObjectId(req.params._id)})
+      categoryModel.list()
     ]);
   
     res.render('user/edit', {
       listBrand: result[0],
       listCategory: result[1],
-      user: result[2],
+      user,
       errors
     });
   } else {
