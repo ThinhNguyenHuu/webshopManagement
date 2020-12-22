@@ -8,7 +8,7 @@ router.get('/login', controller.get_login);
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/auth/login',
-  failureFlash: false
+  failureFlash: true
 }));
 
 router.get('/logout', controller.logout);

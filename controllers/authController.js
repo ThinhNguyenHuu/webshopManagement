@@ -2,7 +2,10 @@ const { ObjectId } = require('mongodb');
 const db = require('../db');
 
 module.exports.get_login = async (req, res, next) => {
-  res.render('auth/login', { layout: false });
+  res.render('auth/login', { 
+    layout: false,
+    error: req.flash('error')
+  });
 }
 
 module.exports.logout = async (req, res, next) => {

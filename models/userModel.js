@@ -35,6 +35,7 @@ module.exports.update = async (data, file, id) => {
 
   await db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
     fullname: data.fullname,
+    password: data.newPassword,
     avatar: source ? user.avatar : source
   }});
 }

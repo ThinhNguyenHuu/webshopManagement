@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const fileupload = require('express-fileupload');
 const hbs = require('hbs');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const passport = require('./passport/index');
 const authRouter = require('./routes/auth');
@@ -44,10 +45,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport middlewares
 app.use(session({ 
-  secret: 'cat',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
