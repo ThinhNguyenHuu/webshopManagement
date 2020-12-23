@@ -1,7 +1,6 @@
 const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
-const { ObjectId } = require('mongodb');
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -57,26 +56,16 @@ module.exports.post_delete = async (req, res, next) => {
 }
 
 module.exports.get_add = async (req, res, next) => {
-  const {listBrand, listCategory} = await getBrandAndCategory();
+  const { listBrand, listCategory } = await getBrandAndCategory();
   res.render('product/add', { listBrand, listCategory });
 }
 
 module.exports.post_add = async (req, res, next) => {
   const files = req.files.image;
  
-  const errors = [];
+  const { errors, result } = await productModel.add(req.body, files);
 
-  const duplicatedProduct = await productModel.checkDuplicated(null, req.body.name);
-  if (duplicatedProduct) 
-    errors.push('Tên sản phẩm đã bị trùng.');
-
-  if (isNaN(req.body.price) || req.body.price < 0) 
-    errors.push('Giá không hợp lệ.');
-  
-  if (isNaN(req.body.discount) || req.body.discount < 0 || req.body.discount > 100)
-    errors.push('Khuyến mãi phải lớn hơn 0 và bé hơn 100.');
-
-  if (errors.length > 0) {
+  if (!result) {
     const {listBrand, listCategory} = await getBrandAndCategory();
 
     res.render('product/add', {
@@ -85,7 +74,6 @@ module.exports.post_add = async (req, res, next) => {
       errors
     });
   } else {
-    await productModel.add(req.body, files);
     res.redirect('/product');
   }
 }
@@ -93,7 +81,7 @@ module.exports.post_add = async (req, res, next) => {
 module.exports.get_edit = async (req, res, next) => {
   if (req.params._id) {
     const result = await Promise.all([
-      productModel.findOne({_id: ObjectId(req.params._id)}),
+      productModel.findOne(req.params._id),
       brandModel.list(),
       categoryModel.list()
     ])
@@ -119,34 +107,23 @@ module.exports.post_edit = async (req, res, next) => {
       files = req.files.image;
     }
 
-    // Validation
-    const errors = [];
-    const duplicatedProduct = await productModel.checkDuplicated(req.params._id, req.params.name);
-    if (duplicatedProduct) 
-      errors.push('Tên sản phẩm đã bị trùng.');
+    const { errors, result } = await productModel.update(req.body, files, req.params._id);
 
-    if (isNaN(req.body.price) || req.body.price < 0) 
-      errors.push('Giá không hợp lệ.');
-    
-    if (isNaN(req.body.discount) || req.body.discount < 0 || req.body.discount > 100)
-      errors.push('Khuyến mãi phải lớn hơn 0 và bé hơn 100.');
-
-    if (errors.length > 0) {
-      const result = await Promise.all([
+    if (!result) {
+      const data = await Promise.all([
         productModel.findOne(req.params._id),
         brandModel.list(),
         categoryModel.list()
       ]);
 
       res.render('product/edit', {
-        product: result[0],
-        listBrand: result[1],
-        listCategory: result[2],
+        product: data[0],
+        listBrand: data[1],
+        listCategory: data[2],
         errors
       });
     }
     else {
-      await productModel.update(req.body, files, req.params._id);
       res.redirect('/product');
     }
     
@@ -156,5 +133,9 @@ module.exports.post_edit = async (req, res, next) => {
 }
 
 const getBrandAndCategory = async () => {
-  return await Promise.all([brandModel.list(), categoryModel.list()]);
+  const result = await Promise.all([brandModel.list(), categoryModel.list()]);
+  return {
+    listBrand: result[0],
+    listCategory: result[1]
+  };
 }

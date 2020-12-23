@@ -57,6 +57,26 @@ module.exports.delete = async (id) => {
 }
 
 module.exports.add = async (body, files) => {   
+
+    const errors = [];
+
+    const duplicatedProduct = await this.checkDuplicated(null, body.name);
+    if (duplicatedProduct) 
+        errors.push('Tên sản phẩm đã bị trùng.');
+
+    if (isNaN(body.price) || body.price < 0) 
+        errors.push('Giá không hợp lệ.');
+    
+    if (isNaN(body.discount) || body.discount < 0 || body.discount > 100)
+        errors.push('Khuyến mãi phải lớn hơn 0 và bé hơn 100.');
+
+    if(errors.length > 0) {
+        return {
+            errors: errors,
+            result: false
+        }
+    }
+
     const sources = await cloudinary.uploadFiles(files);
     
     await db().collection('product').insertOne({
@@ -71,10 +91,36 @@ module.exports.add = async (body, files) => {
         view_count: 0,
         sell_count: 0
     });
+
+    return {
+        errors: [],
+        result: true
+    }
 }
 
 module.exports.update = async (data, files, id) => {
-    const product = await db().collection('product').findOne({_id: ObjectId(id)});
+
+    // Validation
+    const errors = [];
+    const duplicatedProduct = await this.checkDuplicated(id, data.name);
+    if (duplicatedProduct) 
+      errors.push('Tên sản phẩm đã bị trùng.');
+
+    if (isNaN(data.price) || data.price < 0) 
+      errors.push('Giá không hợp lệ.');
+    
+    if (isNaN(data.discount) || data.discount < 0 || data.discount > 100)
+      errors.push('Khuyến mãi phải lớn hơn 0 và bé hơn 100.');
+
+    if(errors.length > 0) {
+        return {
+            errors: errors,
+            result: false
+        };
+    }
+
+      
+    const product = await this.findOne(id);
 
     let sources = null;
     if (files) {
@@ -93,6 +139,11 @@ module.exports.update = async (data, files, id) => {
         brand: ObjectId(data.brand), 
         category: ObjectId(data.category)
     }});
+
+    return {
+        errors: [],
+        result: true
+    };
 }
 
 module.exports.findOne = async (id) => await db().collection('product').findOne({_id: ObjectId(id)});
