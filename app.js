@@ -19,7 +19,7 @@ const categoryRouter = require('./routes/category');
 const brandRouter = require('./routes/brand');
 const userRouter = require('./routes/user');
 const orderRouter = require('./routes/order');
-const {ensureAuthenticated} = require('./middlewares/authenticationMiddlewares');
+const {ensureAuthenticated} = require('./middlewares/authenticationMiddleware');
 
 const app = express();
 

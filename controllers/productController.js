@@ -1,6 +1,7 @@
 const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
+const { validationResult } = require('express-validator');
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -62,10 +63,10 @@ module.exports.get_add = async (req, res, next) => {
 
 module.exports.post_add = async (req, res, next) => {
   const files = req.files.image;
- 
-  const { errors, result } = await productModel.add(req.body, files);
 
-  if (!result) {
+  const {errors} = validationResult(req);
+
+  if (errors.length) {
     const {listBrand, listCategory} = await getBrandAndCategory();
 
     res.render('product/add', {
@@ -73,7 +74,9 @@ module.exports.post_add = async (req, res, next) => {
       listCategory,
       errors
     });
+
   } else {
+    await productModel.add(req.body, files);
     res.redirect('/product');
   }
 }
@@ -107,9 +110,9 @@ module.exports.post_edit = async (req, res, next) => {
       files = req.files.image;
     }
 
-    const { errors, result } = await productModel.update(req.body, files, req.params._id);
+    const {errors} = validationResult(req)
 
-    if (!result) {
+    if (errors.length) {
       const data = await Promise.all([
         productModel.findOne(req.params._id),
         brandModel.list(),
@@ -124,6 +127,7 @@ module.exports.post_edit = async (req, res, next) => {
       });
     }
     else {
+      await productModel.update(req.body, files, req.params._id);
       res.redirect('/product');
     }
     

@@ -3,6 +3,7 @@ const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 
 const USER_PER_PAGE = 8;
@@ -87,9 +88,9 @@ module.exports.post_edit = async (req, res, next) => {
     file = req.files.image;
 
   // update user
-  const { errors, result } = await userModel.update(req.body, file, req.params._id);
+  const { errors } = validationResult(req);
 
-  if (!result) {
+  if (errors.length) {
     const data = await Promise.all([
       brandModel.list(),
       categoryModel.list(),
