@@ -31,9 +31,9 @@ module.exports.userValidator = [
     ,
   check('password')
     .trim()
-    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.')
+    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.') 
     .custom(async (password, {req}) => {
-      const checkCredential = await userModel.checkCredential(password, req.user);
+      const checkCredential = await userModel.checkCredential(password, req.params._id);
       if(!checkCredential)
         throw new Error('Sai mật khẩu.');
       return true;

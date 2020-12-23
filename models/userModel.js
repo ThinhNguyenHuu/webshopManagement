@@ -52,26 +52,6 @@ module.exports.unban = async (id) => {
 module.exports.update = async (data, file, id) => {
   const user = await this.findOne(id);
 
-  // Validation
-  const errors = [];
-  const checkPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!checkPassword)
-    errors.push('Sai mật khẩu.');
-
-   if (data.newPassword != data.newPasswordAgain) {
-    errors.push('Nhập lại mật khẩu mới không khớp.');
-  } else if (!data.newPassword && !data.newPasswordAgain) {
-    data.newPassword = user.password;
-  }
-
-  // if occur error, return
-  if(errors.length > 0) {
-    return {
-      errors: errors,
-      result: false
-    }
-  };
-
   // upload image
   let source = null;
   if(file) {
@@ -87,13 +67,19 @@ module.exports.update = async (data, file, id) => {
     password: data.newPassword,
     avatar: source ? user.avatar : source
   }});
-
-  return {
-    errors: [],
-    result: true
-  };
 }
 
 module.exports.findByEmail = async (email) => await db().collection('user').findOne({email: email});
+
+module.exports.checkCredential = async (password, id) => {
+  const user = await this.findOne(id);
+  if (!user)
+    return false;
+  
+  if (!await bcrypt.compare(password, user.password))
+    return false;
+
+  return user;
+}
 
 module.exports.count = async () => await db().collection('user').countDocuments({});

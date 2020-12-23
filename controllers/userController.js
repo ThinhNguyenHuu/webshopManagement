@@ -104,6 +104,7 @@ module.exports.post_edit = async (req, res, next) => {
       errors
     });
   } else {
+    await userModel.update(req.body, file, req.params._id);
     res.redirect('/user/' + req.params._id);
   }
 
