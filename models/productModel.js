@@ -67,7 +67,9 @@ module.exports.add = async (body, files) => {
         description: body.description, 
         brand: ObjectId(body.brand), 
         category: ObjectId(body.category),
-        reviews: []
+        reviews: [],
+        view_count: 0,
+        sell_count: 0
     });
 }
 

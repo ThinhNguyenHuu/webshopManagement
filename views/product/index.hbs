@@ -51,6 +51,8 @@
                 <th class="col-brand" style="border: 1px solid #ddd;padding:10px">Thương hiệu</th>
                 <th class="col-category" style="border: 1px solid #ddd;padding:10px">Loại</th>
                 <th class="col-images" style="border: 1px solid #ddd;padding:10px">Hình ảnh</th>
+                <th class="col-view-count" style="border: 1px solid #ddd;padding:10px">Số người xem</th>
+                <th class="col-sell-count" style="border: 1px solid #ddd;padding:10px">Số người mua</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chỉnh sửa</th>
               </tr>
             </thead>
@@ -70,6 +72,8 @@
                   </a>
                   {{/each}}
                 </td>
+                <td>{{view_count}}</td>
+                <td>{{sell_count}}</td>
                 <td>
                   <div style="text-align: center;">
                     <a href="/product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>

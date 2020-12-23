@@ -86,34 +86,23 @@ module.exports.post_edit = async (req, res, next) => {
   if (req.files != null && req.files.image != null)
     file = req.files.image;
 
-  const user = await userModel.findOne(req.params._id);
+  // update user
+  const { errors, result } = await userModel.update(req.body, file, req.params._id);
 
-  // Validation
-  const errors = [];
-  const checkPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!checkPassword)
-    errors.push('Sai mật khẩu.');
-
-   if (req.body.newPassword != req.body.newPasswordAgain) {
-    errors.push('Nhập lại mật khẩu mới không khớp.');
-  } else {
-    req.body.newPassword = user.password;
-  }
-
-  if (errors.length > 0) {
-    const result = await Promise.all([
+  if (!result) {
+    const data = await Promise.all([
       brandModel.list(),
-      categoryModel.list()
+      categoryModel.list(),
+      userModel.findOne(req.params._id)
     ]);
   
     res.render('user/edit', {
-      listBrand: result[0],
-      listCategory: result[1],
-      user,
+      listBrand: data[0],
+      listCategory: data[1],
+      user: data[2],
       errors
     });
   } else {
-    await userModel.update(req.body, file, req.params._id);
     res.redirect('/user/' + req.params._id);
   }
 

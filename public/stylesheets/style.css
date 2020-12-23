@@ -96,6 +96,14 @@
 	min-width: 170px;
 }
 
+.col-view-count {
+	min-width: 50px;
+}
+
+.col-sell-count {
+	min-width: 50px;
+}
+
 .col-action {
 	min-width: 50px;
 }
