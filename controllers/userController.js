@@ -43,10 +43,10 @@ module.exports.details = async (req, res, next) => {
   res.render('user/details', {
     listCategory: result[0],
     listBrand: result[1],
-    user: result[2],
+    userEdit: result[2],
     title: 'Thông tin người dùng',
     pageLink: '/user',
-    isNotMyCount: !(result[2]._id.equals(res.locals.user._id))
+    isNotMyAccount: !(result[2]._id.equals(res.locals.user._id))
   }) 
 }
 

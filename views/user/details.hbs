@@ -22,7 +22,7 @@
                 <div class="row-fluid" style="margin: 0;">
                   <div class="span4">
                     <img class=""
-                      src="{{user.avatar.url}}"
+                      src="{{userEdit.avatar.url}}"
                       alt="avatar-user">
                   </div>
                   <div class="span6">
@@ -30,11 +30,11 @@
                       <tbody>
                       <tr>
                           <td><strong>Tên</strong></td>
-                          <td>{{user.fullname}}</td>
+                          <td>{{userEdit.fullname}}</td>
                       </tr>
                       <tr>
                           <td><strong>Email</strong></td>
-                          <td>{{user.email}}</td>
+                          <td>{{userEdit.email}}</td>
                       </tr>
                       </tbody>
                     </table>
@@ -43,21 +43,21 @@
               </div>
               <div class="panel-footer">
                 {{#if isNotMyAccount}}
-                  {{#if user.ban}}
+                  {{#if userEdit.ban}}
                   <a class="btn btn-warning" type="button"
-                            href="/user/unban/{{user._id}}"
+                            href="/user/unban/{{userEdit._id}}"
                             data-toggle="tooltip"
                             data-original-title="Bỏ chặn">Bỏ chặn</a>
                   {{else}}
                   <a class="btn btn-danger" type="button"
-                            href="/user/ban/{{user._id}}"
+                            href="/user/ban/{{userEdit._id}}"
                             data-toggle="tooltip"
                             data-original-title="Chặn">Chặn</a>
                   {{/if}}
                 
                 {{else}}
                 <a class="btn btn-success" type="button"
-                            href="/user/edit/{{user._id}}"
+                            href="/user/edit/{{userEdit._id}}"
                             data-toggle="tooltip"
                             data-original-title="Sửa">Sửa</a>
                 {{/if}}
