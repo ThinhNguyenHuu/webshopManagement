@@ -2,6 +2,8 @@ const brandModel = require('./brandModel');
 const categoryModel = require('./categoryModel');
 const { ObjectId } = require('mongodb');
 const {db} = require('../db');
+const cloudinary = require('../cloudinary');
+const bcrypt = require('bcrypt');
 
 module.exports.list = async (pageIndex, itemPerPage) => {
 
@@ -56,30 +58,70 @@ module.exports.update = async (data, file, id) => {
   let source = null;
   if(file) {
     const destroyPromise = cloudinary.destroyFiles(user.avatar);
-        const new_sources = await cloudinary.uploadFiles(file);
-        await destroyPromise;
-        source = new_sources[0];
+    const new_sources = await cloudinary.uploadFiles(file);
+    await destroyPromise;
+    source = new_sources[0];
+  }
+
+  console.log(source);
+
+  const saltRounds = 10;
+  if(data.newPassword) {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(data.newPassword, salt);
+    data.password = hash;
+  } else {
+    data.password = user.password;
   }
 
   // update db
   await db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
     fullname: data.fullname,
-    password: data.newPassword,
-    avatar: source ? user.avatar : source
+    password: data.password,
+    avatar: source ? source : user.avatar
   }});
 }
 
-module.exports.findByEmail = async (email) => await db().collection('user').findOne({email: email});
+module.exports.findByUsername = async (username) => await db().collection('user').findOne({username: username});
 
-module.exports.checkCredential = async (password, id) => {
-  const user = await this.findOne(id);
+module.exports.checkCredential = async (password, username) => {
+  const user = await this.findByUsername(username);
   if (!user)
-    return false;
+    return {
+      error: 'Người dùng không tồn tại.',
+      result: false
+    }
   
   if (!await bcrypt.compare(password, user.password))
-    return false;
+    return {
+      error: 'Sai mật khẩu.',
+      result: false
+    }
 
-  return user;
+  return {
+    error: '',
+    result: user
+  }
+}
+
+module.exports.checkCredentialWithId = async (password, id) => {
+  const user = await this.findOne(id);
+  if (!user)
+    return {
+      error: 'Người dùng không tồn tại.',
+      result: false
+    }
+  
+  if (!await bcrypt.compare(password, user.password))
+    return {
+      error: 'Sai mật khẩu.',
+      result: false
+    }
+
+  return {
+    error: '',
+    result: user
+  }
 }
 
 module.exports.count = async () => await db().collection('user').countDocuments({});

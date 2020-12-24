@@ -10,7 +10,7 @@
   {{#each errors}}
   <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Lỗi!!</strong> {{this}}
+    <strong>Lỗi!!</strong> {{msg}}
   </div>
   {{/each}}
 </div>
@@ -27,7 +27,7 @@
             <div class="control-group">
               <label class="control-label">Tên<span class="require-sign">*</span> :</label>
               <div class="controls">
-                <input type="text" class="span9" id="name" name="name" value="{{user.fullname}}" required/>
+                <input type="text" class="span9" id="fullname" name="fullname" value="{{user.fullname}}" required/>
               </div>
             </div>
             <div class="control-group">

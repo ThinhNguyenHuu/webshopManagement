@@ -44,6 +44,9 @@ module.exports.uploadFiles = async (files) => {
 }
 
 module.exports.destroyFiles = async (sources) => {
+  if(!sources)
+    return;
+    
   if (Array.isArray(sources)) {
     for (const source of sources) {
       this.destroy(source.id);

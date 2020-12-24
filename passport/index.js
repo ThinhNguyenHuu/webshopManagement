@@ -5,23 +5,13 @@ const passport = require('passport')
 const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt');
 
-passport.use(new LocalStrategy({
-  usernameField: 'email',
-  passwordField: 'password'
-}, 
+passport.use(new LocalStrategy(
   async function(username, password, done) {
-    const user = await userModel.findByEmail(username);
-
-    if(!user) {
-      return done(null, false, { message: 'Người dùng không tồn tại' });
-    }
-
-    // const checkPassword = await bcrypt.compare(password, user.password);
-    // if(!checkPassword) {
-    //   return done(null, false, { message: 'Sai mật khẩu' });
-    // }
-
-    return done(null, user);
+    const { error, result } = await userModel.checkCredential(password, username);
+  
+    if (error)
+      return done(null, false, { message: error });
+    return done(null, result);
 }));
 
 passport.serializeUser(function(user, done) {

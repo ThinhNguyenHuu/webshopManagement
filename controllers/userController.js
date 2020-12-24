@@ -19,7 +19,7 @@ module.exports.index = async (req, res, next) => {
   } = await userModel.list(req.query.page, USER_PER_PAGE);
 
   res.render('user/index', {
-    title: 'User',
+    title: 'Người dùng',
     listBrand,
     listCategory,
     listUser,

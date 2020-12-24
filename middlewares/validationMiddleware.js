@@ -25,17 +25,17 @@ module.exports.productValidator = [
 ];
 
 module.exports.userValidator = [
-  check('name')
+  check('fullname')
     .trim()
     .isLength({min: 5, max: 30}).withMessage('Tên nằm trong khoảng 5 đến 30 ký tự.')
     ,
   check('password')
     .trim()
     .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.') 
-    .custom(async (password, {req}) => {
-      const checkCredential = await userModel.checkCredential(password, req.params._id);
-      if(!checkCredential)
-        throw new Error('Sai mật khẩu.');
+    .custom(async (password, {req, res}) => {
+      const { error } = await userModel.checkCredentialWithId(password, req.params._id);
+      if(error)
+        throw new Error('Sai mật khẩu');
       return true;
     })
     ,
@@ -52,5 +52,6 @@ module.exports.userValidator = [
     .custom((newPasswordAgain, {req}) => {
       if (newPasswordAgain != req.body.newPassword)
         throw new Error('Nhập lại mật khẩu không khớp mật khẩu mới');
+      return true;
     })
 ]
