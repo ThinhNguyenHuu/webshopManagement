@@ -6,10 +6,10 @@ const {db} = require('../db');
 module.exports.list = async (filter, pageIndex, itemPerPage) => {
 
   // get count
-  const count = await orderModel.count();
+  const count = await this.count();
 
   // get last page
-  let lastPage = Math.ceil(count / ORDER_PER_PAGE);
+  let lastPage = Math.ceil(count / itemPerPage);
   lastPage = lastPage < 1 ? 1 : lastPage;
 
   // get current page
@@ -17,71 +17,177 @@ module.exports.list = async (filter, pageIndex, itemPerPage) => {
   page = page < 0 ? 1 : page;
   page = page > lastPage ? lastPage : page;
 
-  // get data
-  const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
-    userModel.list(),
-    productModel.list(),
-    db().collection('order').find({}, {
-      skip: itemPerPage * (page - 1),
-      limit: itemPerPage
-    }).sort({_id: -1}).toArray()
-  ]);
+  const listOrder = await db().collection('order').aggregate([
+    {
+      $skip: itemPerPage * (page - 1)
+    },
+    {
+      $limit: itemPerPage
+    },
+    {
+      $sort: { _id: -1 }
+    },
+    {
+      $lookup: {
+        from: 'user',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'order_user'
+      }
+    }
+  ]).toArray();
 
-  const listBrand = result[0];
-  const listCategory = result[1];
-  const listUser = result[2];
-  const listProduct = result[3];
-  const listOrder = result[4];
-
-  listOrder.map(order => {
-    order.user = listUser.find(user => user._id.equals(order.user));
-    order.ordered_products.map(ordered_product => {
-      ordered_product.product = listProduct.find(product => product._id.equals(ordered_products.product));
-      return ordered_product;
-    });
-    order.total_price = order.ordered_products.reduce((a, b) => {
-      return { price: (a.price - a.price * a.discount) * a.quantity + 
-                      (b.price - b.price * b.discount) * b.quantity};
-    }).price;
-
+  listOrder.map(async (order) => {
+    order.user = order.order_user[0];
+    order.date = (new Date(order.date)).toLocaleDateString('en-US');
     return order;
   });
 
   return{
-    listBrand,
-    listCategory,
     listOrder,
     page,
     lastPage
   };
 }
 
-module.exports.details = async (id) => {
+module.exports.getOrderProduct = async (orderId, pageIndex, itemPerPage) => {
 
-  const order = await orderModel.findOne(id);
+  // get count
+  const count = await this.countOrderProduct(orderId);
 
-  order.user = await userModel.findOne(order.user);
-  order.ordered_products.map(async (ordered_product) => {
-    ordered_product.product = await productModel.findOne(ordered_product.product);
-    ordered_product.final_price = 
-      (ordered_product.price - ordered_product.price * ordered_product.discount) * ordered_product.quantity;
-      
-    return ordered_product;
+  // get last page
+  let lastPage = Math.ceil(count / itemPerPage);
+  lastPage = lastPage < 1 ? 1 : lastPage;
+
+  // get current page
+  let page = parseInt(pageIndex) || 1;
+  page = page < 0 ? 1 : page;
+  page = page > lastPage ? lastPage : page;
+
+  const orderProduct = await db().collection('order_product').aggregate([
+    {
+      $match: { order: ObjectId(orderId) }
+    },
+    {
+      $skip: itemPerPage * (page - 1)
+    },
+    {
+      $limit: itemPerPage
+    },
+    {
+      $lookup: {
+        from: 'product',
+        localField: 'product',
+        foreignField: '_id',
+        as: 'object_product'
+      }
+    }
+  ]).toArray();
+
+  orderProduct.map(product => {
+    product.name = product.object_product[0].name;
   });
-  order.total_price = order.ordered_products.reduce((a, b) => {
-    return { price: (a.price - a.price * a.discount) * a.quantity + 
-                    (b.price - b.price * b.discount) * b.quantity}; 
-  }).price;
 
-  return order;
+  return {
+    orderProduct,
+    page,
+    lastPage
+  }
+}
+
+module.exports.salesByTime = async (from, to) => {
+
+  const listOrder = await db().collection('order').find({
+    date: {
+      $gte: new Date(from),
+      $lt: new Date(to)
+    }
+  })
+  .toArray();
+
+  const listOrderId = listOrder.map(order => order._id);
+
+  const salesPromise = db().collection('order_product').aggregate([
+    {
+      $match: { 'order': { $in: listOrderId } }
+    },
+    {
+      $group: {
+        _id: { product_id: '$product', price: '$price' },
+        total_quantity_all: { $sum: '$quantity' },
+        total_price_all: { $sum: '$total_price' }
+      }
+    },
+    {
+      $lookup: {
+        from: 'product',
+        localField: '_id.product_id',
+        foreignField: '_id',
+        as: 'product'
+      }
+    }
+  ]).toArray();
+
+  const result = await Promise.all([
+    brandModel.list(),
+    categoryModel.list(),
+    salesPromise
+  ]);
+
+  const listBrand = result[0];
+  const listCategory = result[1];
+  const sales = result[2];
+
+  sales.map(item => {
+    item.name = item.product[0].name;
+    item.price = item._id.price
+    item.brand = listBrand.find(brand => brand._id.equals(item.product[0].brand)).name;
+    item.category = listCategory.find(category => category._id.equals(item.product[0].category)).name;
+    return item;
+  });
+
+  let totalPrice = 0;
+  sales.forEach(item => {
+    totalPrice += item.total_price_all;
+  });
+
+  return { sales, totalPrice };
 }
 
 module.exports.count = async () => {
   return await db().collection('order').countDocuments({});
 }
 
+module.exports.countOrderProduct = async (orderId) => {
+  return await db().collection('order').countDocuments({order: ObjectId(orderId)});
+}
+
 module.exports.findOne = async (id) => {
-  return await db().collection('order').findOne({_id: ObjectId(id)});
+  let order = await db().collection('order').aggregate([
+    {
+      $match: { _id: ObjectId(id) }
+    },
+    {
+      $lookup: {
+        from: 'user',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'order_user'
+      } 
+    }
+  ]).toArray();
+
+  order = order[0];
+  order.user = order.order_user[0];
+  order.date = (new Date(order.date)).toLocaleDateString('en-US');
+  return order;
+}
+
+module.exports.updateStatus = async (type, id) => {
+  const statusList = ['Chờ lấy hàng', 'Đang giao hàng', 'Đã nhận hàng'];
+  const status = statusList[type - 1];
+
+  await db().collection('order').updateOne({_id: ObjectId(id)}, {
+    $set: { status: status }
+  });
 }

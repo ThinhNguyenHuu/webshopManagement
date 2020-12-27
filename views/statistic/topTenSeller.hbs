@@ -1,0 +1,68 @@
+
+<div id="content">
+  <div id="content-header">
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">/</span></li>
+      <li class="active"><a href="/statistic/topTenSeller">{{title}}</a></li>
+    </ul>
+    <div class="row-fluid">
+      <div class="span6" ><h1>{{title}}</h1></div>
+      <div class="span6" style="margin-top: 50px;text-align:end">
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-content nopadding">  
+          <div class="table-responsive">
+            <div class="search-bar">
+              <form method="GET" class="form-search">
+                <label for="brand">Thương hiệu</label>
+                <select id="brand" name="brand" style="margin-right:20px">
+                  <option value="All" selected>Tất cả</option>
+                  {{#each listBrand}}
+                  <option value="{{_id}}" {{#idEquals _id ../brandId}}selected{{/idEquals}}>{{name}}</option>
+                  {{/each}}
+                </select>
+
+                <label for="category">Loại</label>
+                <select name="category" id="category" style="margin-right:20px">
+                  <option value="All" selected>Tất cả</option>
+                  {{#each listCategory}}
+                  <option value="{{_id}}" {{#idEquals _id ../categoryId}}selected{{/idEquals}}>{{name}}</option>
+                  {{/each}}
+                </select>
+
+                <button type="submit" class="btn btn-primary">Tìm</button>
+              </form>
+            </div>
+            <table class="table table-bordered table-striped table-hover data-table">
+            <thead>
+              <tr>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên sản phẩm</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Giá</th>
+                <th class="col-discount" style="border: 1px solid #ddd;padding:10px">Khuyến mãi</th>
+                <th class="col-sell-count" style="border: 1px solid #ddd;padding:10px">Số lượng bán</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each listProduct}}
+              <tr class="gradeA">
+                <td><strong>{{name}}</strong></td>
+                <td>{{price}}</td>
+                <td>{{discount}}</td>
+                <td>{{sell_count}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

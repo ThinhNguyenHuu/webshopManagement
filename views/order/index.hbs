@@ -19,10 +19,9 @@
             <thead>
               <tr>
                 <th class="col-name" style="border: 1px solid #ddd;padding:10px">Khách hàng</th>
-                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Sđt</th>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Sđt</th>
                 <th class="col-description" style="border: 1px solid #ddd;padding:10px">Địa chỉ</th>
-                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Sản phẩm</th>
-                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Ngày giao</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Ngày đặt</th>
                 <th class="col-price" style="border: 1px solid #ddd;padding:10px">Tổng giá</th>
                 <th class="col-price" style="border: 1px solid #ddd;padding:10px">Tình trạng</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chi tiết</th>
@@ -32,13 +31,10 @@
               {{#each listOrder}}
                 <tr class="gradeA">
                   <td><strong><a href="/user/{{user._id}}">{{user.fullname}}</a></strong></td>
-                  <td>{{phone_number}}</td>
+                  <td>{{phonenum}}</td>
                   <td>{{address}}</td>
-                  {{#each ordered_products}}
-
-                  {{/each}}
                   <td>{{date}}</td>
-                  <td>{{totalPrice}}</td>
+                  <td>{{total_price_all}}</td>
                   <td>{{status}}</td>
                   <td>
                     <div style="text-align: center;">
@@ -50,7 +46,7 @@
             </tbody>
             </table>
             <div class="span12">
-            <div class="pagination pagination-right">
+            <div class="pagination pagination-right alternate">
               <ul>
                 {{#if havePreviousPage}}
                 <li><a href="{{pageLink}}?page=1">First</a></li>

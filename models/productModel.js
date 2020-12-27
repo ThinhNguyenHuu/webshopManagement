@@ -4,7 +4,8 @@ const Double = require('mongodb').Double;
 const cloudinary = require('../cloudinary');
 const brandModel = require('./brandModel');
 const categoryModel = require('./categoryModel');
-const bcrypt = require('bcrypt');
+const orderModel = require('./orderModel');
+
 
 module.exports.list = async (pageIndex, itemPerPage, searchText, categoryId, brandId) => {
 
@@ -95,6 +96,11 @@ module.exports.update = async (data, files, id) => {
         brand: ObjectId(data.brand), 
         category: ObjectId(data.category)
     }});
+}
+
+module.exports.listTopTenSeller = async (categoryId, brandId) => {
+    const filter = getFilter(null, categoryId, brandId);
+    return await db().collection('product').find(filter).sort({sell_count: -1}).limit(10).toArray();
 }
 
 module.exports.findOne = async (id) => await db().collection('product').findOne({_id: ObjectId(id)});

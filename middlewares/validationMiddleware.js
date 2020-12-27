@@ -1,11 +1,14 @@
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const productModel = require('../models/productModel');
 const userModel = require('../models/userModel');
+const brandModel = require('../models/brandModel');
+const categoryModel = require('../models/categoryModel');
   
 module.exports.productValidator = [
   check('name')
     .trim()
-    .isLength({min: 10, max: 50}).withMessage('Tên nằm trong khoảng 10 đến 50 ký tự.')
+    .isLength({min: 10}).withMessage('Tên tối thiểu 10 ký tự.')
+    .isLength({max: 50}).withMessage('Tền tối đa 50 ký tự.')
     .custom(async (name, {req}) => {
       const duplicatedProduct = await productModel.checkDuplicated(req.params._id, name);
       if(duplicatedProduct)
@@ -21,13 +24,29 @@ module.exports.productValidator = [
     .isFloat({min: 100000, max: 100000000}).withMessage('Giá nằm trong khoảng từ 100.000đ đến 100.000.000đ')
     ,
   check('discount')
-    .isFloat({min: 0, max: 100}).withMessage('Khuyển mãi nằm trong khoảng từ 0% đến 100%')  
+    .isFloat({min: 0, max: 100}).withMessage('Khuyển mãi nằm trong khoảng từ 0% đến 100%')
+    ,
+  check('brand')
+    .custom(async (brandId, {req}) => {
+      const result = await Promise.all([
+        brandModel.findOne(brandId),
+        categoryModel.findOne(req.body.category)
+      ]);
+
+      const brand = result[0];
+      const category = result[1];
+
+      if(!brand.category.find(item => item.equals(category._id)))
+        throw new Error('Trong ' + category.name + ' không có thương hiệu ' + brand.name + '.');
+      return true;
+    })
 ];
 
 module.exports.userValidator = [
   check('fullname')
     .trim()
-    .isLength({min: 5, max: 30}).withMessage('Tên nằm trong khoảng 5 đến 30 ký tự.')
+    .isLength({min: 5}).withMessage('Tên tối thiểu 5 ký tự.')
+    .isLength({max: 30}).withMessage('Tên tối đa 30 ký tự')
     ,
   check('password')
     .trim()

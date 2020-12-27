@@ -38,21 +38,21 @@
                 </select>
                 {{/strInclude}}
                 <input type="text" class="input-medium search-query" name="name" value="{{searchText}}">
-                <button type="submit" class="btn">Tìm</button>
+                <button type="submit" class="btn btn-primary">Tìm</button>
               </form>
             </div>
             <table class="table table-bordered table-striped table-hover data-table main-data-table">
             <thead>
               <tr>
                 <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên</th>
-                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Chú thích</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Mô tả</th>
                 <th class="col-price" style="border: 1px solid #ddd;padding:10px">Giá</th>
-                <th class="col-discount" style="border: 1px solid #ddd;padding:10px">Giảm giá</th>
+                <th class="col-discount" style="border: 1px solid #ddd;padding:10px">Khuyến mãi</th>
                 <th class="col-brand" style="border: 1px solid #ddd;padding:10px">Thương hiệu</th>
                 <th class="col-category" style="border: 1px solid #ddd;padding:10px">Loại</th>
                 <th class="col-images" style="border: 1px solid #ddd;padding:10px">Hình ảnh</th>
                 <th class="col-view-count" style="border: 1px solid #ddd;padding:10px">Số người xem</th>
-                <th class="col-sell-count" style="border: 1px solid #ddd;padding:10px">Số người mua</th>
+                <th class="col-sell-count" style="border: 1px solid #ddd;padding:10px">Số lượng bán</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chỉnh sửa</th>
               </tr>
             </thead>
@@ -85,7 +85,7 @@
             </tbody>
             </table>
             <div class="span12">
-            <div class="pagination pagination-right">
+            <div class="pagination pagination-right alternate">
               <ul>
                 {{#if havePreviousPage}}
                 <li><a href="{{pageLink}}?page=1&name={{searchText}}&brand={{brandId}}">First</a></li>

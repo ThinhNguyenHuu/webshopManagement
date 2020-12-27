@@ -5,7 +5,7 @@
       <li><a href="/">Home</a> <span class="divider">/</span></li>
       <li class="active"><a href="{{pageLink}}">{{title}}</a></li>
     </ul>
-  </div>
+  </div>  
 
   <div class="container-fluid">
     <div class="row-fluid">
@@ -29,7 +29,7 @@
                       </tr>
                       <tr>
                           <td><strong>Số điện thoại</strong></td>
-                          <td>{{order.phone_number}}</td>
+                          <td>{{order.phonenum}}</td>
                       </tr>
                       <tr>
                           <td><strong>Địa chỉ</strong></td>
@@ -41,16 +41,42 @@
                       </tr>
                       <tr>
                           <td><strong>Tổng giá</strong></td>
-                          <td>{{order.total_price}}</td>
+                          <td>{{order.total_price_all}}</td>
                       </tr>
                       <tr>
                           <td><strong>Tình trạng</strong></td>
-                          <td>{{order.status}}</td>
+                          <td style="font-weight:700;color:red">{{order.status}}</td>
                       </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
+              </div>
+              <div class="panel-footer" style="text-align: right;">
+                {{#if orderStatus.waitingForProduct}}
+                {{else}}
+                 <a class="btn btn-primary" type="button"
+                    href="/order/{{order._id}}/updateStatus/1"
+                    data-toggle="tooltip"
+                    data-original-title="Bỏ chặn">Chờ lấy hàng</a>
+                {{/if}}
+
+                {{#if orderStatus.deliveringProduct}}
+                {{else}}
+                 <a class="btn btn-warning" type="button"
+                    href="/order/{{order._id}}/updateStatus/2"
+                    data-toggle="tooltip"
+                    data-original-title="Bỏ chặn">Đang giao hàng</a>
+                {{/if}}
+
+                {{#if orderStatus.receivedProduct}}
+                {{else}}
+                 <a class="btn btn-success" type="button"
+                    href="/order/{{order._id}}/updateStatus/3"
+                    data-toggle="tooltip"
+                    data-original-title="Bỏ chặn">Đã nhận hàng</a>
+                {{/if}}
+
               </div>
             </div>
           </div>
@@ -68,24 +94,39 @@
             <thead>
               <tr>
                 <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên sản phẩm</th>
-                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Giá</th>
-                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Khuyến mãi</th>
+                <th class="col-description" style="border: 1px solid #ddd;padding:10px">Đơn giá</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Số lượng</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Thành tiền</th>
               </tr>
             </thead>
             <tbody>
-              {{#each order.ordered_products}}
+              {{#each orderProduct}}
                 <tr class="gradeA">
-                  <td><strong>{{product.name}}</strong></td>
-                  <td>{{product.price}}</td>
-                  <td>{{product.discount}}</td>
+                  <td><strong>{{name}}</strong></td>
+                  <td>{{price}}</td>
                   <td>{{quantity}}</td>
-                  <td>{{final_price}}</td>
+                  <td>{{total_price}}</td>
                 </tr>
               {{/each}}
             </tbody>
             </table>
+          </div>
+          <div class="span12">
+            <div class="pagination pagination-right alternate">
+              <ul>
+                {{#if havePreviousPage}}
+                <li><a href="/order/{{order._id}}?page=1&">First</a></li>
+                <li><a href="/order/{{order._id}}?page={{previousPage}}">{{previousPage}}</a></li>
+                {{/if}}
+
+                <li class="active"><a href="#">{{page}}</a></li>
+
+                {{#if haveNextPage}}
+                <li><a href="/order/{{order._id}}?page={{nextPage}}">{{nextPage}}</a></li>
+                <li><a href="/order/{{order._id}}?page={{lastPage}}">Last</a></li>
+                {{/if}}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

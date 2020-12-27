@@ -19,6 +19,7 @@ const categoryRouter = require('./routes/category');
 const brandRouter = require('./routes/brand');
 const userRouter = require('./routes/user');
 const orderRouter = require('./routes/order');
+const statisticRouter = require('./routes/statistic');
 const {ensureAuthenticated} = require('./middlewares/authenticationMiddleware');
 
 const app = express();
@@ -67,6 +68,7 @@ app.use('/category', ensureAuthenticated, categoryRouter);
 app.use('/brand', ensureAuthenticated, brandRouter);
 app.use('/user', ensureAuthenticated, userRouter);
 app.use('/order', ensureAuthenticated, orderRouter);
+app.use('/statistic', ensureAuthenticated, statisticRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

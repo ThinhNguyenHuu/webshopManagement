@@ -1,0 +1,63 @@
+
+<div id="content">
+  <div id="content-header">
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">/</span></li>
+      <li class="active"><a href="/statistic/sales">{{title}}</a></li>
+    </ul>
+    <div class="row-fluid">
+      <div class="span6" ><h1>{{title}}</h1></div>
+      <div class="span6" style="margin-top: 50px;text-align:end">
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-content nopadding">  
+          <div class="table-responsive">
+            <div class="search-bar">
+              <form method="GET" class="form-search" autocomplete="off">
+                <label for="from">Từ ngày</label>
+                <input type="text" id="from" name="from" style="margin-right:20px" value="{{from}}" class="default-cursor" readonly>
+                <label for="to">đến ngày</label>
+                <input type="text" id="to" name="to" style="margin-right: 20px;" value="{{to}}" class="default-cursor" readonly>
+                <button type="submit" class="btn btn-primary">Tìm</button>
+              </form>
+            </div>
+            <table class="table table-bordered table-striped table-hover data-table">
+            <thead>
+              <tr>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên sản phẩm</th>
+                <th class="col-brand" style="border: 1px solid #ddd;padding:10px">Thương hiệu</th>
+                <th class="col-category" style="border: 1px solid #ddd;padding:10px">Loại</th>
+                <th class="col-price" style="border: 1px solid #ddd;padding:10px">Đơn giá</th>
+                <th class="col-sell-count" style="border: 1px solid #ddd;padding:10px">Số lượng bán</th>
+                <th class="col-action" style="border: 1px solid #ddd;padding:10px">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each sales}}
+              <tr class="gradeA">
+                <td><strong>{{name}}</strong></td>
+                <td>{{brand}}</td>
+                <td>{{category}}</td>
+                <td>{{price}}đ</td>
+                <td>{{total_quantity_all}}</td>
+                <td>{{total_price_all}}đ</td>
+              </tr>
+              {{/each}}
+            </tbody>
+            </table>
+          </div>
+          <div class="sales-total-price">
+            <span>Tổng: {{totalPrice}}đ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

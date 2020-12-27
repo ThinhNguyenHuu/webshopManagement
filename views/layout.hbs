@@ -15,6 +15,12 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"/>
 <link rel="stylesheet" href="/stylesheets/style.css" />
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/javascripts/datepicker.js"></script>
 </head>
 <body>
 
@@ -62,7 +68,11 @@
     
     <li> <a href="/user"><i class="icon icon-user"></i> <span>Người dùng</span></a> </li>
     <li><a href="/order"><i class="icon icon-user"></i> <span>Đơn đặt hàng</span></a></li>
-    <li> <a href="/charts"><i class="icon icon-signal"></i> <span>Thống kê</span></a> </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-signal"></i> <span>Thống kê</span></a>
+      <ul>
+        <li><a href="/statistic/sales">Doanh số</a></li>
+        <li><a href="/statistic/topTenSeller">Số lượng bán</a></li>
+      </ul>
   </ul>
 </div>
 <!--sidebar-menu-->
@@ -77,17 +87,17 @@
 
 <!--end-Footer-part-->
 
-<script src="/javascripts/jquery.min.js"></script> 
-<script src="/javascripts/jquery.ui.custom.js"></script> 
+{{!-- <script src="/javascripts/jquery.min.js"></script>  --}}
+{{!-- <script src="/javascripts/jquery.ui.custom.js"></script>  --}}
 <script src="/javascripts/bootstrap.min.js"></script> 
-<script src="/javascripts/jquery.uniform.js"></script> 
+{{!-- <script src="/javascripts/jquery.uniform.js"></script>  --}}
 <script src="/javascripts/select2.min.js"></script> 
 <script src="/javascripts/matrix.js"></script> 
 <script src="/javascripts/matrix.tables.js"></script>
 <script src="/javascripts/excanvas.min.js"></script> 
-<script src="/javascripts/jquery.flot.min.js"></script> 
+{{!-- <script src="/javascripts/jquery.flot.min.js"></script> 
 <script src="/javascripts/jquery.flot.resize.min.js"></script> 
-<script src="/javascripts/jquery.peity.min.js"></script> 
+<script src="/javascripts/jquery.peity.min.js"></script>  --}}
 <script src="/javascripts/matrix.dashboard.js"></script> 
 
 </body>
