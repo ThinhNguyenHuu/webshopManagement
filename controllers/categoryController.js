@@ -1,5 +1,7 @@
 const productModel = require('../models/productModel');
 const { ObjectId } = require('mongodb');
+const brandModel = require('../models/brandModel');
+const categoryModel = require('../models/categoryModel');
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -11,22 +13,24 @@ module.exports.index = async (req, res, next) => {
   // get brand id
   const brandId = req.query.brand || 'All';
 
-  const { 
-    listBrand, 
-    listCategory, 
-    listProduct, 
-    page, 
-    lastPage 
-  } = await productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, req.params._id, brandId);
+  const result = await Promise.all([
+    brandModel.list(),
+    categoryModel.list(),
+    productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, req.params._id, brandId)
+  ])
+
+  const listBrand = result[0];
+  const listCategory = result[1];
+  const { listProduct, page, lastPage } = result[2];
 
   // get category
-  const category = listCategory.find(category => category._id.equals(ObjectId(req.params._id)));
+  const category = listCategory.find(category => ObjectId(category._id).equals(ObjectId(req.params._id)));
 
 
   // get list brand in category
   const listBrandInCategory = listBrand.filter(brand => {
     for (const item of brand.category) {
-      if (item.equals(category._id)) return true;
+      if (ObjectId(item).equals(category._id)) return true;
     }
     return false;
   });

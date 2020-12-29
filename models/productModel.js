@@ -4,14 +4,16 @@ const Double = require('mongodb').Double;
 const cloudinary = require('../cloudinary');
 const brandModel = require('./brandModel');
 const categoryModel = require('./categoryModel');
-const orderModel = require('./orderModel');
+const cache = require('../lru-cache');
 
 
 module.exports.list = async (pageIndex, itemPerPage, searchText, categoryId, brandId) => {
 
-    const result = await Promise.all([ brandModel.list(), categoryModel.list() ]);
-    const listBrand = result[0];
-    const listCategory = result[1];
+    const key = ['listProduct', pageIndex || 1, itemPerPage, searchText, categoryId, brandId].join('/');
+
+    // get date from cache
+    const value = await cache.get(key);
+    if (value) return value;
 
     // get filter
     const filter = getFilter(searchText, categoryId, brandId);
@@ -28,24 +30,37 @@ module.exports.list = async (pageIndex, itemPerPage, searchText, categoryId, bra
     page = page < 0 ? 1 : page;
     page = page > lastPage ? lastPage : page;
 
-    const listProduct = await db().collection('product').find(filter, {
-        skip: itemPerPage * (page - 1),
-        limit: itemPerPage
-    }).sort({_id: -1}).toArray();
+    const listProduct = await db().collection('product').aggregate([
+        { $match: filter },
+        { $sort: { _id: -1 } },
+        { $skip: itemPerPage * (page - 1) },
+        { $limit: itemPerPage },
+        { $lookup: {
+            from: 'brand',
+            localField: 'brand',
+            foreignField: '_id',
+            as: 'brand'
+        }},
+        { $unwind: '$brand' },
+        { $lookup: {
+            from: 'category',
+            localField: 'category',
+            foreignField: '_id',
+            as: 'category'
+        }},
+        { $unwind: '$category' }
+    ]).toArray();
 
-    listProduct.map(product => {
-        product.brand = listBrand.find(brand => brand._id.equals(product.brand)).name;
-        product.category = listCategory.find(category => category._id.equals(product.category)).name;
-        return product; 
-    });
-
-    return {
-        listBrand,
-        listCategory,
+    const data = {
         listProduct,
         page,
         lastPage
     };
+
+    // cache date
+    await cache.set(key, data);
+
+    return data;
 }
 
 module.exports.delete = async (id) => {
@@ -55,6 +70,7 @@ module.exports.delete = async (id) => {
     
     await cloudinary.destroyFiles(product.images_sources);
     await deletePromise;
+    await cache.clear();
 }
 
 module.exports.add = async (body, files) => {   
@@ -73,6 +89,8 @@ module.exports.add = async (body, files) => {
         view_count: 0,
         sell_count: 0
     });
+
+    await cache.clear();
 }
 
 module.exports.update = async (data, files, id) => {
@@ -96,6 +114,8 @@ module.exports.update = async (data, files, id) => {
         brand: ObjectId(data.brand), 
         category: ObjectId(data.category)
     }});
+
+    await cache.clear();
 }
 
 module.exports.listTopTenSeller = async (categoryId, brandId) => {

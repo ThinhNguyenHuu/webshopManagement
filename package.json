@@ -21,6 +21,7 @@
     "fs": "0.0.1-security",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "lru-cache": "^6.0.0",
     "mongodb": "^3.6.3",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.6",

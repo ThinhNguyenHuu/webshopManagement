@@ -2,8 +2,15 @@ const brandModel = require('./brandModel');
 const categoryModel = require('./categoryModel');
 const { ObjectId } = require('mongodb');
 const {db} = require('../db');
+const cache = require('../lru-cache');
 
 module.exports.list = async (filter, pageIndex, itemPerPage) => {
+
+  const key = ['listOrder', pageIndex, itemPerPage].join('/');
+
+  // get cached data
+  const value = await cache.get(key);
+  if (value) return value;
 
   // get count
   const count = await this.count();
@@ -43,14 +50,25 @@ module.exports.list = async (filter, pageIndex, itemPerPage) => {
     return order;
   });
 
-  return{
+  const data = {
     listOrder,
     page,
     lastPage
   };
+
+  // cache data
+  await cache.set(key, value);
+
+  return data;
 }
 
 module.exports.getOrderProduct = async (orderId, pageIndex, itemPerPage) => {
+
+  const key = ['orderProduct', orderId, pageIndex || 1, itemPerPage].join('/');
+
+  // get cached data
+  const value = await cache.get(key);
+  if (value) return value;
 
   // get count
   const count = await this.countOrderProduct(orderId);
@@ -88,11 +106,16 @@ module.exports.getOrderProduct = async (orderId, pageIndex, itemPerPage) => {
     product.name = product.object_product[0].name;
   });
 
-  return {
+  const data = {
     orderProduct,
     page,
     lastPage
   }
+
+  // cache data
+  await cache.set(key, value);
+
+  return data;
 }
 
 module.exports.salesByTime = async (from, to) => {

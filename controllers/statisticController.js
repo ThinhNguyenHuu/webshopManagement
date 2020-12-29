@@ -5,9 +5,11 @@ const orderModel = require('../models/orderModel');
 
 module.exports.sales = async (req, res, next) => {
 
-  if (!Date.parse(req.body.from) || !Date.parse(req.body.to)) {
-    const start = new Date(); start.setHours(0, 0, 0, 0);
-    const end = new Date(); end.setHours(23, 59, 59, 999);
+  if (!req.body.from) {
+    const date = new Date(); date.setHours(0, 0, 0, 0);
+    const start = new Date(date);
+    const end = new Date(date); end.setDate(date.getDate() + 1);
+    
     req.query.from = start.toLocaleDateString('en-US');
     req.query.to = end.toLocaleDateString('en-US');
   }

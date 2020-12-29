@@ -4,8 +4,15 @@ const { ObjectId } = require('mongodb');
 const {db} = require('../db');
 const cloudinary = require('../cloudinary');
 const bcrypt = require('bcrypt');
+const cache = require('../lru-cache');
 
 module.exports.list = async (pageIndex, itemPerPage) => {
+
+  const key = ['listUser', pageIndex || 1, itemPerPage].join('/');
+
+  // get cached data
+  const value = await cache.get(key);
+  if (value) return value;
 
   // get count
   const count = await this.count();
@@ -28,27 +35,40 @@ module.exports.list = async (pageIndex, itemPerPage) => {
     }).sort({_id: -1}).toArray()
   ]);
 
-  return {
+  const data = {
     listBrand: result[0],
     listCategory: result[1],
     listUser: result[2],
     page,
     lastPage
   };
+
+  // cache data
+  await cache.set(key, data);
+
+  return data;
 }
 
 module.exports.findOne = async (id) => await db().collection('user').findOne({_id: ObjectId(id)});
 
 module.exports.ban = async (id) => {
-  await db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
-    ban: true
-  }});
+  await Promise.all([
+    db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
+      ban: true
+    }})
+    ,
+    cache.clear()
+  ]);
 }
 
 module.exports.unban = async (id) => {
-  await db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
-    ban: false
-  }});
+  await Promise.all([
+    db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
+      ban: false
+    }})
+    ,
+    cache.clear()
+  ]);
 }
 
 module.exports.update = async (data, file, id) => {
@@ -63,8 +83,6 @@ module.exports.update = async (data, file, id) => {
     source = new_sources[0];
   }
 
-  console.log(source);
-
   const saltRounds = 10;
   if(data.newPassword) {
     const salt = await bcrypt.genSalt(saltRounds);
@@ -75,11 +93,15 @@ module.exports.update = async (data, file, id) => {
   }
 
   // update db
-  await db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
-    fullname: data.fullname,
-    password: data.password,
-    avatar: source ? source : user.avatar
-  }});
+  await Promise.all([
+    db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
+      fullname: data.fullname,
+      password: data.password,
+      avatar: source ? source : user.avatar
+    }})
+    ,
+    cache.clear()
+  ]);
 }
 
 module.exports.findByUsername = async (username) => await db().collection('user').findOne({username: username});

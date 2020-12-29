@@ -34,7 +34,7 @@ hbs.registerHelper('strInclude', function(arg1, arg2, options) {
   return arg1.includes(arg2) ? options.fn(this) : options.inverse(this);
 });
 hbs.registerHelper('idEquals', function(arg1, arg2, options) {
-  return arg1.equals(arg2) ? options.fn(this) : options.inverse(this);
+  return ObjectId(arg1).equals(ObjectId(arg2)) ? options.fn(this) : options.inverse(this);
 });
 
 app.use(fileupload({ useTempFiles: true }));
