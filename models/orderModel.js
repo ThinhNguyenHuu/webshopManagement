@@ -142,6 +142,12 @@ module.exports.salesByTime = async (from, to) => {
       }
     },
     {
+      $sort: { total_price_all: 1 }
+    },
+    {
+      $limit: 7
+    },
+    {
       $lookup: {
         from: 'product',
         localField: '_id.product_id',

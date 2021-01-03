@@ -19,6 +19,7 @@
     "express-session": "^1.17.1",
     "express-validator": "^6.8.1",
     "fs": "0.0.1-security",
+    "googleapis": "^66.0.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
     "lru-cache": "^6.0.0",
