@@ -22,6 +22,7 @@ const orderRouter = require('./routes/order');
 const statisticRouter = require('./routes/statistic');
 const apiRouter = require('./api');
 const {ensureAuthenticated} = require('./middlewares/authenticationMiddleware');
+const { ObjectId } = require('mongodb');
 
 const app = express();
 
@@ -35,6 +36,7 @@ hbs.registerHelper('strInclude', function(arg1, arg2, options) {
   return arg1.includes(arg2) ? options.fn(this) : options.inverse(this);
 });
 hbs.registerHelper('idEquals', function(arg1, arg2, options) {
+  if (!ObjectId.isValid(arg2))  return options.inverse(this);
   return ObjectId(arg1).equals(ObjectId(arg2)) ? options.fn(this) : options.inverse(this);
 });
 
@@ -63,7 +65,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/auth', authRouter);
-app.use('/', indexRouter);
+app.use('/', ensureAuthenticated, indexRouter);
 app.use('/product', ensureAuthenticated, productRouter);
 app.use('/category', ensureAuthenticated, categoryRouter);
 app.use('/brand', ensureAuthenticated, brandRouter);
