@@ -76,16 +76,16 @@
   drawUserLocationChart(userLocation.locations, userLocation.counts); 
 </script>
 <script>
-  const tag = document.getElementById('online-user');
-  const interval = setInterval(() => {
-    axios.get('/api/getOnlineUser')
-    .then(function(response) {
-      tag.innerHTML = response.data.onlineUser;
-    });
-  }, 1000);
+  window.onload = function() {
+    const tag = document.getElementById('online-user');
+    const interval = setInterval(() => {
+      axios.get('/api/getOnlineUser')
+      .then(function(response) {
+        tag.innerHTML = response.data.onlineUser;
+      });
+    }, 1000);
 
-  document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
-  document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
-  
-
+    document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
+    document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
+  }
 </script>
