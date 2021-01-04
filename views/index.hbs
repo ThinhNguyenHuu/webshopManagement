@@ -76,7 +76,7 @@
   drawUserLocationChart(userLocation.locations, userLocation.counts); 
 </script>
 <script>
-  window.onload = function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const tag = document.getElementById('online-user');
     const interval = setInterval(() => {
       axios.get('/api/getOnlineUser')
@@ -87,5 +87,5 @@
 
     document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
     document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
-  }
+  });
 </script>
