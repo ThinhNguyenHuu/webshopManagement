@@ -11,10 +11,10 @@
     <!--Action boxes-->
     <div class="quick-actions_homepage">
       <ul class="quick-actions">
-        <li class="bg_lb"> <a href="/"> <i class="icon-dashboard"></i> Trang chủ </a> </li>
+        <li class="bg_lb"> <a id="dashboard-btn" href="/"> <i class="icon-dashboard"></i> Trang chủ </a> </li>
         <li class="bg_lo"> <a href="/product"> <i class="icon-th"></i> Sản phẩm </a> </li>
         <li class="bg_ly"> <a href="/user"> <i class="icon-user"></i> Người dùng </a> </li>
-        <li class="bg_ls"> <a href="/order"> <i class="icon-user"></i> Đơn đặt hàng </a> </li>
+        <li class="bg_ls"> <a href="/order"> <i class="icon-tag"></i> Đơn đặt hàng </a> </li>
       </ul>
     </div>
     <!--End-Action boxes-->    
@@ -77,10 +77,15 @@
 </script>
 <script>
   const tag = document.getElementById('online-user');
-  setInterval(() => {
+  const interval = setInterval(() => {
     axios.get('/api/getOnlineUser')
     .then(function(response) {
       tag.innerHTML = response.data.onlineUser;
     });
-  }, 2000);
+  }, 1000);
+
+  document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
+  document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
+  
+
 </script>
