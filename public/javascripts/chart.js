@@ -103,8 +103,11 @@ function updateUserAccess() {
   axios.get('api/getUserAccess')
     .then(function(response) {
       const {userAccess} = response.data;
-      if (userAccess) drawUserAccessChart(userAccess.dates, userAccess.counts);
-      else  setTimeout(updateUserAccess, 1000);
+      if (userAccess) {
+        document.getElementById('user-access-loader').style.display = 'none';
+        document.getElementById('user-access-chart').style.display = 'block';
+        drawUserAccessChart(userAccess.dates, userAccess.counts);
+      } else  setTimeout(updateUserAccess, 1000);
     });
 }
 
@@ -112,7 +115,11 @@ function updateTopSearchQuery() {
   axios.get('api/getTopSearchQuery')
     .then(function(response) {
       const {topSearchQuery} = response.data;
-      if (topSearchQuery) drawTopSearchQueryChart(topSearchQuery.keywords, topSearchQuery.counts);
+      if (topSearchQuery) {
+        document.getElementById('top-search-query-loader').style.display = 'none';
+        document.getElementById('top-search-query-chart').style.display = 'block';
+        drawTopSearchQueryChart(topSearchQuery.keywords, topSearchQuery.counts);
+      }
       else  setTimeout(updateTopSearchQuery, 1000);
     });
 }
@@ -121,7 +128,11 @@ function updateUserLocation() {
   axios.get('api/getUserLocation')
     .then(function(response) {
       const {userLocation} = response.data;
-      if (userLocation) drawUserLocationChart(userLocation.locations, userLocation.counts);
+      if (userLocation) {
+        document.getElementById('user-location-loader').style.display = 'none';
+        document.getElementById('user-location-chart').style.display = 'block';
+        drawUserLocationChart(userLocation.locations, userLocation.counts);
+      }
       else  setTimeout(updateUserLocation, 1000);
     });
 }
