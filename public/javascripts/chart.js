@@ -98,3 +98,55 @@ function drawUserLocationChart(locations, counts) {
     }
   });
 }
+
+function updateUserAccess() {
+  axios.get('api/getUserAccess')
+    .then(function(response) {
+      const {userAccess} = response.data;
+      if (userAccess) drawUserAccessChart(userAccess.dates, userAccess.counts);
+      else  setTimeout(updateUserAccess, 1000);
+    });
+}
+
+function updateTopSearchQuery() {
+  axios.get('api/getTopSearchQuery')
+    .then(function(response) {
+      const {topSearchQuery} = response.data;
+      if (topSearchQuery) drawTopSearchQueryChart(topSearchQuery.keywords, topSearchQuery.counts);
+      else  setTimeout(updateTopSearchQuery, 1000);
+    });
+}
+
+function updateUserLocation() {
+  axios.get('api/getUserLocation')
+    .then(function(response) {
+      const {userLocation} = response.data;
+      if (userLocation) drawUserLocationChart(userLocation.locations, userLocation.counts);
+      else  setTimeout(updateUserLocation, 1000);
+    });
+}
+
+function updateOnlineUser() {
+  window.addEventListener('DOMContentLoaded', function() {
+    const tag = document.getElementById('online-user');
+    const interval = setInterval(() => {
+      axios.get('/api/getOnlineUser')
+      .then(function(response) {
+        if (response.data.onlineUser)
+          tag.innerHTML = response.data.onlineUser;
+      });
+    }, 1000);
+    
+    document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
+    document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
+  });
+}
+
+function updateChart() {
+  updateUserAccess();
+  updateTopSearchQuery();
+  updateUserLocation();
+}
+
+updateOnlineUser();
+updateChart();

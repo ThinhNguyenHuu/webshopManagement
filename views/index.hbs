@@ -32,7 +32,7 @@
             <div class="span3">
               <ul class="site-stats">
                 <li class="bg_lh"><i class="icon-user"></i> <strong>{{totalUser}}</strong> <small>Người dùng</small></li>
-                <li class="bg_lh"><i class="icon-globe"></i> <strong id="online-user">{{onlineUser}}</strong> <small>Người dùng online</small></li>
+                <li class="bg_lh"><i class="icon-globe"></i> <strong id="online-user">0</strong> <small>Người dùng online</small></li>
                 <li class="bg_lh"><i class="icon-shopping-cart"></i> <strong>{{totalProduct}}</strong> <small>Sản phẩm</small></li>
                 <li class="bg_lh"><i class="icon-tag"></i> <strong>{{totalOrder}}</strong> <small>Đơn hàng</small></li>
               </ul>
@@ -65,27 +65,6 @@
 <!--end-main-container-part-->
 
 <script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
-<script src="/javascripts/chart.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-  const userAccess = JSON.parse(decodeURIComponent("{{{userAccess}}}"));
-  const topSearchQuery = JSON.parse(decodeURIComponent("{{{topSearchQuery}}}"));
-  const userLocation = JSON.parse(decodeURIComponent("{{{userLocation}}}"));
-  drawUserAccessChart(userAccess.dates, userAccess.counts); 
-  drawTopSearchQueryChart(topSearchQuery.keywords, topSearchQuery.counts); 
-  drawUserLocationChart(userLocation.locations, userLocation.counts); 
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const tag = document.getElementById('online-user');
-    const interval = setInterval(() => {
-      axios.get('/api/getOnlineUser')
-      .then(function(response) {
-        tag.innerHTML = response.data.onlineUser;
-      });
-    }, 1000);
-
-    document.getElementById('dashboard-link').onclick = () => clearInterval(interval);  
-    document.getElementById('dashboard-btn').onclick = () => clearInterval(interval);
-  });
-</script>
+<script src="/javascripts/chart.js"></script>
+  

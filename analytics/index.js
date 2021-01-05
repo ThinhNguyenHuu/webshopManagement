@@ -7,100 +7,92 @@ const viewId = process.env.ANALYTICS_VIEW_ID;
 
 
 module.exports.getOnlineUser = async () => {
-  const response = await jwt.authorize();
-  const result = await google.analytics('v3').data.realtime.get({
-    'auth': jwt,
-    'ids': 'ga:' + viewId,
-    'metrics': 'rt:activeUsers',
-    'dimensions': 'ga:medium'
-  });
+    const response = await jwt.authorize().catch(e => { return 0; });
+    const result = await google.analytics('v3').data.realtime.get({
+      'auth': jwt,
+      'ids': 'ga:' + viewId,
+      'metrics': 'rt:activeUsers',
+      'dimensions': 'ga:medium'
+    });
 
-  if (!result || !result.data.rows)
-    return 0;
-  return parseInt(result.data.rows[0][1]);
+    if (!result.data.rows)
+      return 0;
+    return parseInt(result.data.rows[0][1]);
 }
 
 module.exports.getUserAccessData = async () => {
-  const response = await jwt.authorize();
-  const result = await google.analytics('v3').data.ga.get({
-    'auth': jwt,
-    'ids': 'ga:' + viewId,
-    'start-date': '6daysAgo',
-    'end-date': 'today',
-    'metrics': 'ga:users',
-    'dimensions': 'ga:date'
-  });
+    const response = await jwt.authorize();
+    const result = await google.analytics('v3').data.ga.get({
+      'auth': jwt,
+      'ids': 'ga:' + viewId,
+      'start-date': '6daysAgo',
+      'end-date': 'today',
+      'metrics': 'ga:users',
+      'dimensions': 'ga:date'
+    });
 
-  if (!result)
-    return { dates: [], counts: [] };
+    const data = result.data.rows;
+    const dates = [];
+    const counts = [];
 
-  const data = result.data.rows;
-  const dates = [];
-  const counts = [];
+    data.forEach(item => {
+      const day = item[0].substring(6, 8);
+      const month = item[0].substring(4, 6);
+      const year = item[0].substring(0, 4);
 
-  data.forEach(item => {
-    const day = item[0].substring(6, 8);
-    const month = item[0].substring(4, 6);
-    const year = item[0].substring(0, 4);
+      const date = [day, month, year].join('/');
+      dates.push(date);
+      counts.push(parseInt(item[1]));
+    });
 
-    const date = [day, month, year].join('/');
-    dates.push(date);
-    counts.push(parseInt(item[1]));
-  });
-
-  return { dates, counts };
+    return { dates, counts };
+  
 }
 
 module.exports.getTopSearchQueryData = async () => {
-  const response = await jwt.authorize();
-  const result = await google.analytics('v3').data.ga.get({
-    'auth': jwt,
-    'ids': 'ga:' + viewId,
-    'start-date': '30daysAgo',
-    'end-date': 'today',
-    'metrics': 'ga:searchResultViews',
-    'dimensions': 'ga:searchKeyword',
-    'sort': '-ga:searchResultViews',
-    'max-results': 7
-  });
+    const response = await jwt.authorize();
+    const result = await google.analytics('v3').data.ga.get({
+      'auth': jwt,
+      'ids': 'ga:' + viewId,
+      'start-date': '30daysAgo',
+      'end-date': 'today',
+      'metrics': 'ga:searchResultViews',
+      'dimensions': 'ga:searchKeyword',
+      'sort': '-ga:searchResultViews',
+      'max-results': 7
+    });
 
-  if (!result)
-    return { keywords: [], counts: [] };
+    const data = result.data.rows;
+    const keywords = [];
+    const counts = [];
+    data.forEach(item => {
+      keywords.push(item[0]);
+      counts.push(parseInt(item[1]));
+    });
 
-  const data = result.data.rows;
-  const keywords = [];
-  const counts = [];
-  data.forEach(item => {
-    keywords.push(item[0]);
-    counts.push(parseInt(item[1]));
-  });
-
-  return { keywords, counts };
+    return { keywords, counts };
 }
 
 module.exports.getUserLocationData = async () => {
-  const response = await jwt.authorize();
-  const result = await google.analytics('v3').data.ga.get({
-    'auth': jwt,
-    'ids': 'ga:' + viewId,
-    'start-date': '30daysAgo',
-    'end-date': 'today',
-    'metrics': 'ga:users',
-    'dimensions': 'ga:city',
-    'max-results': 5
-  });
+    const response = await jwt.authorize();
+    const result = await google.analytics('v3').data.ga.get({
+      'auth': jwt,
+      'ids': 'ga:' + viewId,
+      'start-date': '30daysAgo',
+      'end-date': 'today',
+      'metrics': 'ga:users',
+      'dimensions': 'ga:city',
+      'max-results': 5
+    });
 
-  if (!result)
-    return { locations: [], counts: [] };
+    const data = result.data.rows;
+    const locations = [];
+    const counts = [];
+    data.forEach(item => {
+      locations.push(item[0]);
+      counts.push(parseInt(item[1]));
+    });
 
-  const data = result.data.rows;
-  const locations = [];
-  const counts = [];
-  data.forEach(item => {
-    locations.push(item[0]);
-    counts.push(parseInt(item[1]));
-  });
-
-  return { locations, counts };
+    return { locations, counts };
 }
 
