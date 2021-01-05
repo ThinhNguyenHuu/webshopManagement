@@ -5,7 +5,7 @@ const orderModel = require('../models/orderModel');
 
 module.exports.sales = async (req, res, next) => {
 
-  if (!req.body.from) {
+  if (!req.query.from) {
     const date = new Date(); date.setHours(0, 0, 0, 0);
     const start = new Date(date);
     const end = new Date(date); end.setDate(date.getDate() + 1);
