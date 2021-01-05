@@ -33,9 +33,9 @@
                   <td><strong><a href="/user/{{user._id}}">{{user.fullname}}</a></strong></td>
                   <td>{{phonenum}}</td>
                   <td>{{address}}</td>
-                  <td>{{date}}</td>
+                  <td>{{dateToString date}}</td>
                   <td>{{total_price_all}}</td>
-                  <td>{{status}}</td>
+                  <td style="color:{{statusColor}};"><strong>{{status}}</strong></td>
                   <td>
                     <div style="text-align: center;">
                       <a href="/order/{{_id}}" class="details"><i class="material-icons" data-toggle="tooltip" title="Details">&#xE88E;</i></a> 

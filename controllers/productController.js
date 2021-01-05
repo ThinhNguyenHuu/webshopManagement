@@ -30,7 +30,8 @@ module.exports.index = async (req, res, next) => {
     previousPage: page - 1,
     nextPage: page + 1,
     havePreviousPage: page > 1,
-    haveNextPage: page < lastPage
+    haveNextPage: page < lastPage,
+    isProductPage: true
   });
 }
 
@@ -40,7 +41,8 @@ module.exports.get_delete = async (req, res, next) => {
     res.render('product/delete', {
       _id: req.params._id,
       listBrand,
-      listCategory
+      listCategory,
+      isProductPage: true
     })
   } else {
     next();
@@ -58,7 +60,7 @@ module.exports.post_delete = async (req, res, next) => {
 
 module.exports.get_add = async (req, res, next) => {
   const { listBrand, listCategory } = await getBrandAndCategory();
-  res.render('product/add', { listBrand, listCategory });
+  res.render('product/add', { listBrand, listCategory, isProductPage: true });
 }
 
 module.exports.post_add = async (req, res, next) => {
@@ -96,7 +98,8 @@ module.exports.get_edit = async (req, res, next) => {
     res.render('product/edit', {
       product,
       listBrand,
-      listCategory
+      listCategory,
+      isProductPage: true
     });
   } else {
     next();

@@ -39,16 +39,13 @@ module.exports.list = async (filter, pageIndex, itemPerPage) => {
         from: 'user',
         localField: 'user',
         foreignField: '_id',
-        as: 'order_user'
+        as: 'user'
       }
+    },
+    {
+      $unwind: { path: '$user' }
     }
   ]).toArray();
-
-  listOrder.map(async (order) => {
-    order.user = order.order_user[0];
-    order.date = (new Date(order.date)).toLocaleDateString('en-US');
-    return order;
-  });
 
   const data = {
     listOrder,
@@ -195,15 +192,15 @@ module.exports.findOne = async (id) => {
         from: 'user',
         localField: 'user',
         foreignField: '_id',
-        as: 'order_user'
+        as: 'user'
       } 
+    },
+    {
+      $unwind: { path: '$user' }
     }
   ]).toArray();
 
-  order = order[0];
-  order.user = order.order_user[0];
-  order.date = (new Date(order.date)).toLocaleDateString('en-US');
-  return order;
+  return order[0];
 }
 
 module.exports.updateStatus = async (type, id) => {

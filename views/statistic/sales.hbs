@@ -42,16 +42,16 @@
                 <td><strong>{{name}}</strong></td>
                 <td>{{brand}}</td>
                 <td>{{category}}</td>
-                <td>{{price}}đ</td>
+                <td>{{formatPrice price}}đ</td>
                 <td>{{total_quantity_all}}</td>
-                <td>{{total_price_all}}đ</td>
+                <td>{{formatPrice total_price_all}}đ</td>
               </tr>
               {{/each}}
             </tbody>
             </table>
           </div>
           <div class="sales-total-price">
-            <span>Tổng: {{totalPrice}}đ</span>
+            <span>Tổng: {{formatPrice totalPrice}}đ</span>
           </div>
         </div>
       </div>

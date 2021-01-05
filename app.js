@@ -39,6 +39,13 @@ hbs.registerHelper('idEquals', function(arg1, arg2, options) {
   if (!ObjectId.isValid(arg2))  return options.inverse(this);
   return ObjectId(arg1).equals(ObjectId(arg2)) ? options.fn(this) : options.inverse(this);
 });
+hbs.registerHelper('dateToString', function(arg) {
+  return [("0" + arg.getDate()).slice(-2), ("0" + (arg.getMonth() + 1)).slice(-2), arg.getFullYear()].join('/') + ' - ' 
+    + ("0" + arg.getHours()).slice(-2) + ':' + ("0" + arg.getMinutes()).slice(-2);
+});
+hbs.registerHelper('formatPrice', function(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}); 
 
 app.use(fileupload({ useTempFiles: true }));
 app.use(logger('dev'));

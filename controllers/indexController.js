@@ -17,6 +17,7 @@ module.exports.index = async (req, res, next) => {
     listBrand: result[1],
     totalProduct: result[2],
     totalOrder: result[3],
-    totalUser: result[4]
+    totalUser: result[4],
+    isDashboard: true
   });
 }

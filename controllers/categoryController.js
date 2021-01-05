@@ -51,6 +51,7 @@ module.exports.index = async (req, res, next) => {
     previousPage: page - 1,
     nextPage: page + 1,
     havePreviousPage: page > 1,
-    haveNextPage: page < lastPage
+    haveNextPage: page < lastPage,
+    isCategoryPage: true
   });
 }

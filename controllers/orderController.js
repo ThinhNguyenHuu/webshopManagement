@@ -14,6 +14,12 @@ module.exports.index = async (req, res, next) => {
   ]);
 
   const { listOrder, page, lastPage } = result[2];
+  listOrder.map(order => {
+    let color = 'red'
+    if (order.status === 'Đang giao hàng')  color = 'orange'
+    if (order.status === 'Đã nhận hàng') color = 'green';
+    order.statusColor = color;
+  })
 
   res.render('order/index', {
     title: 'Đơn đặt hàng',
@@ -26,7 +32,8 @@ module.exports.index = async (req, res, next) => {
     previousPage: page - 1,
     nextPage: page + 1,
     havePreviousPage: page > 1,
-    haveLastPage: page < lastPage
+    haveLastPage: page < lastPage,
+    isOrderPage: true
   });
 }
 
@@ -61,7 +68,8 @@ module.exports.details = async (req, res, next) => {
     nextPage: page + 1,
     havePreviousPage: page > 1,
     haveNextPage: page < lastPage,
-    orderStatus
+    orderStatus,
+    isOrderPage: true
   })
 }
 

@@ -37,11 +37,11 @@
                       </tr>
                       <tr>
                           <td><strong>Ngày giao</strong></td>
-                          <td>{{order.date}}</td>
+                          <td>{{dateToString order.date}}</td>
                       </tr>
                       <tr>
                           <td><strong>Tổng giá</strong></td>
-                          <td>{{order.total_price_all}}</td>
+                          <td><strong>{{formatPrice order.total_price_all}}</strong></td>
                       </tr>
                       <tr>
                           <td><strong>Tình trạng</strong></td>
@@ -103,9 +103,9 @@
               {{#each orderProduct}}
                 <tr class="gradeA">
                   <td><strong>{{name}}</strong></td>
-                  <td>{{price}}</td>
+                  <td>{{formatPrice price}}</td>
                   <td>{{quantity}}</td>
-                  <td>{{total_price}}</td>
+                  <td>{{formatPrice total_price}}</td>
                 </tr>
               {{/each}}
             </tbody>

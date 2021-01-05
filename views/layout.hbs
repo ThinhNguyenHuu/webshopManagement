@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="/stylesheets/style.css" />
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="/javascripts/datepicker.js"></script>
@@ -48,9 +47,9 @@
 <!--sidebar-menu-->
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Trang chủ</a>
   <ul>
-    <li><a id="dashboard-link" href="/"><i class="icon icon-home"></i> <span>Trang chủ</span></a> </li>
-    <li><a href="/product"><i class="icon icon-th"></i> <span>Sản phẩm</span></a></li>
-    <li class="submenu"> <a href="#"><i class="icon icon-th"></i> <span>Loại</span></a>
+    <li class="{{#if isDashboard}}active{{/if}}"><a id="dashboard-link" href="/"><i class="icon icon-home"></i> <span>Trang chủ</span></a> </li>
+    <li class="{{#if isProductPage}}active{{/if}}"><a href="/product"><i class="icon icon-th"></i> <span>Sản phẩm</span></a></li>
+    <li class="{{#if isCategoryPage}}active{{/if}} submenu"> <a href="#"><i class="icon icon-th"></i> <span>Loại</span><span class="label label-important">4</span></a>
       <ul>
         {{#each listCategory}}
         <div class="sidebar-category">
@@ -59,7 +58,7 @@
         {{/each}}
       </ul>
     </li>
-    <li class="submenu"> <a href="#"><i class="icon icon-th"></i> <span>Thương hiệu</span></a>
+    <li class="{{#if isBrandPage}}active{{/if}} submenu"> <a href="#"><i class="icon icon-th"></i> <span>Thương hiệu</span><span class="label label-important">6</span></a>
       <ul>
         {{#each listBrand}}
         <li><a href="/brand/{{_id}}">{{name}}</a></li>
@@ -67,9 +66,9 @@
       </ul>
     </li>
     
-    <li> <a href="/user"><i class="icon icon-user"></i> <span>Người dùng</span></a> </li>
-    <li><a href="/order"><i class="icon icon-user"></i> <span>Đơn đặt hàng</span></a></li>
-    <li class="submenu"> <a href="#"><i class="icon icon-signal"></i> <span>Thống kê</span></a>
+    <li class="{{#if isUserPage}}active{{/if}}"> <a href="/user"><i class="icon icon-user"></i> <span>Người dùng</span></a> </li>
+    <li class="{{#if isOrderPage}}active{{/if}}"><a href="/order"><i class="icon icon-tag"></i> <span>Đơn đặt hàng</span></a></li>
+    <li class="{{#if isStatisticPage}}active{{/if}} submenu"> <a href="#"><i class="icon icon-signal"></i> <span>Thống kê</span></a>
       <ul>
         <li><a href="/statistic/sales">Doanh số</a></li>
         <li><a href="/statistic/topTenSeller">Số lượng bán</a></li>
