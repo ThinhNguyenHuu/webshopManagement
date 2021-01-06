@@ -1,9 +1,7 @@
-const { ObjectId } = require('mongodb');
 const passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
   
 const userModel = require('../models/userModel');
-const bcrypt = require('bcrypt');
 
 passport.use(new LocalStrategy(
   async function(username, password, done) {

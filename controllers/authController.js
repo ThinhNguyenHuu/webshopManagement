@@ -1,5 +1,3 @@
-const { ObjectId } = require('mongodb');
-const db = require('../db');
 
 module.exports.get_login = async (req, res, next) => {
   res.render('auth/login', { 
@@ -10,5 +8,5 @@ module.exports.get_login = async (req, res, next) => {
 
 module.exports.logout = async (req, res, next) => {
   req.logout();
-  res.redirect('/');
+  res.redirect('/auth/login');
 }

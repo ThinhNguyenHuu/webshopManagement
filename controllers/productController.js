@@ -2,6 +2,7 @@ const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
 const { validationResult } = require('express-validator');
+const { reset } = require('nodemon');
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -60,7 +61,7 @@ module.exports.post_delete = async (req, res, next) => {
 
 module.exports.get_add = async (req, res, next) => {
   const { listBrand, listCategory } = await getBrandAndCategory();
-  res.render('product/add', { listBrand, listCategory, isProductPage: true });
+  res.render('product/add', { listBrand, listCategory, errors: req.flash('errors') , isProductPage: true });
 }
 
 module.exports.post_add = async (req, res, next) => {
@@ -69,14 +70,8 @@ module.exports.post_add = async (req, res, next) => {
   const {errors} = validationResult(req);
 
   if (errors.length) {
-    const {listBrand, listCategory} = await getBrandAndCategory();
-
-    res.render('product/add', {
-      listBrand,
-      listCategory,
-      errors
-    });
-
+    req.flash('errors', errors);
+    res.redirect('/product/add');
   } else {
     await productModel.add(req.body, files);
     res.redirect('/product');
@@ -99,6 +94,7 @@ module.exports.get_edit = async (req, res, next) => {
       product,
       listBrand,
       listCategory,
+      errors: req.flash('errors'),
       isProductPage: true
     });
   } else {
@@ -113,23 +109,12 @@ module.exports.post_edit = async (req, res, next) => {
       files = req.files.image;
     }
 
-    const {errors} = validationResult(req)
+    const {errors} = validationResult(req);
 
     if (errors.length) {
-      const data = await Promise.all([
-        productModel.findOne(req.params._id),
-        brandModel.list(),
-        categoryModel.list()
-      ]);
-
-      res.render('product/edit', {
-        product: data[0],
-        listBrand: data[1],
-        listCategory: data[2],
-        errors
-      });
-    }
-    else {
+      req.flash('errors', errors);
+      res.redirect(`/product/edit/${req.params._id}`)
+    } else {
       await productModel.update(req.body, files, req.params._id);
       res.redirect('/product');
     }
