@@ -74,3 +74,29 @@ module.exports.userValidator = [
       return true;
     })
 ]
+
+module.exports.emailValidator = [
+  check('email')
+    .trim()
+    .isEmail().withMessage('Email không hợp lệ.')
+    .custom(async (email) => {
+      const find = userModel.findByEmail(email);
+      if (!find)
+        throw new Error('Không có tài khoản sử dụng email này.');
+      return true;
+    })
+]
+
+module.exports.updatePasswordValidator = [
+  check('password')
+    .trim()
+    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.')
+    ,
+  check('confirmPassword')
+    .trim()
+    .custom((confirmPassword, {req}) => {
+      if (confirmPassword != req.body.password)
+        throw new Error('Nhập lại mật khẩu không trùng khớp.');
+      return true;
+    })
+]

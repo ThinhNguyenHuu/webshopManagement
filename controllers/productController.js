@@ -2,7 +2,6 @@ const productModel = require('../models/productModel');
 const brandModel = require('../models/brandModel');
 const categoryModel = require('../models/categoryModel');
 const { validationResult } = require('express-validator');
-const { reset } = require('nodemon');
 
 const PRODUCT_PER_PAGE = 8;
 

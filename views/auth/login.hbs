@@ -20,7 +20,7 @@
     </div>   
     {{/if}}       
     
-    <form action="/auth/login" id="loginform" class="form-vertical" method="post">
+    <form action="/auth/login" id="loginform" class="form-vertical" method="post" autocomplete="off">
       <div class="control-group normal_text"> <h3>Đăng nhập</h3></div>
         <div class="control-group">
             <div class="controls">
@@ -38,7 +38,23 @@
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-success" style="float: right;">Đăng nhập</button>
+          <span class="pull-left"><a href="#" class="flip-link btn btn-info" id="to-recover">Quên mật khẩu ?</a></span>
         </div>
+    </form>
+
+    <form id="recoverform" action="/auth/forgetPassword" method="post" class="form-vertical">
+      <p class="normal_text">Nhập email của bạn để xác nhận trước khi khôi phục.</p>
+  
+      <div class="controls">
+        <div class="main_input_box">
+          <span class="add-on bg_lo"><i class="icon-envelope"></i></span><input type="text" name="email" placeholder="Email" />
+        </div>
+      </div>
+          
+      <div class="form-actions">
+        <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Quay lại</a></span>
+        <button type="submit" class="btn btn-success" style="float: right;">Gửi</button>
+      </div>
     </form>
   </div>
   

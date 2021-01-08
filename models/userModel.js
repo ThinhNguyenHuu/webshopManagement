@@ -83,14 +83,9 @@ module.exports.update = async (data, file, id) => {
     source = new_sources[0];
   }
 
-  const saltRounds = 10;
-  if(data.newPassword) {
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(data.newPassword, salt);
-    data.password = hash;
-  } else {
-    data.password = user.password;
-  }
+  if(data.newPassword) 
+    data.password = await hashPassword(data.newPassword);
+  else data.password = user.password;
 
   // update db
   await Promise.all([
@@ -106,44 +101,52 @@ module.exports.update = async (data, file, id) => {
 
 module.exports.findByUsername = async (username) => await db().collection('user').findOne({username: username});
 
+module.exports.findByEmail = async (email) => await db().collection('user').findOne({email: email});
+
 module.exports.checkCredential = async (password, username) => {
   const user = await this.findByUsername(username);
-  if (!user)
-    return {
-      error: 'Người dùng không tồn tại.',
-      result: false
-    }
+
+  if (!user || !user.is_admin)
+    return { error: 'Người dùng không tồn tại.' }
   
   if (!await bcrypt.compare(password, user.password))
-    return {
-      error: 'Sai mật khẩu.',
-      result: false
-    }
+    return { error: 'Sai mật khẩu.' }
 
-  return {
-    error: '',
-    result: user
-  }
+  return { result: user }
 }
 
 module.exports.checkCredentialWithId = async (password, id) => {
   const user = await this.findOne(id);
-  if (!user)
-    return {
-      error: 'Người dùng không tồn tại.',
-      result: false
-    }
+  if (!user || !user.is_admin)
+    return { error: 'Người dùng không tồn tại.' }
   
   if (!await bcrypt.compare(password, user.password))
-    return {
-      error: 'Sai mật khẩu.',
-      result: false
-    }
+    return { error: 'Sai mật khẩu.' }
 
-  return {
-    error: '',
-    result: user
-  }
+  return { result: user }
+}
+
+module.exports.checkVerificationCode = async (code, id) => {
+  const find = this.findOne(id);
+  if (!find) 
+    return false;
+  return find.verification != code;
+}
+
+module.exports.updatePassword = async (password, id) => {
+  const hash = await hashPassword(password);
+  await db().collection('user').updateOne({_id: ObjectId(id)}, {
+    $set: {
+      password: hash
+    }
+  });
 }
 
 module.exports.count = async () => await db().collection('user').countDocuments({});
+
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hash = await bcrypt.hash(password, salt);
+  return hash;
+}
