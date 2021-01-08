@@ -2,8 +2,6 @@ const {db} = require('../db');
 const ObjectId = require('mongodb').ObjectId;
 const Double = require('mongodb').Double;
 const cloudinary = require('../cloudinary');
-const brandModel = require('./brandModel');
-const categoryModel = require('./categoryModel');
 const cache = require('../lru-cache');
 
 
@@ -51,11 +49,7 @@ module.exports.list = async (pageIndex, itemPerPage, searchText, categoryId, bra
         { $unwind: '$category' }
     ]).toArray();
 
-    const data = {
-        listProduct,
-        page,
-        lastPage
-    };
+    const data = { listProduct, page, lastPage };
 
     // cache date
     await cache.set(key, data);
@@ -64,13 +58,17 @@ module.exports.list = async (pageIndex, itemPerPage, searchText, categoryId, bra
 }
 
 module.exports.delete = async (id) => {
-    const collection = db().collection('product');
-    const product = await collection.findOne({ _id: ObjectId(id) });
-    const deletePromise = collection.deleteOne({ _id: ObjectId(id) });
-    
-    await cloudinary.destroyFiles(product.images_sources);
-    await deletePromise;
-    await cache.clear();
+    const product = await this.findOne(id);
+    if (!product)
+        return false;
+
+    await Promise.all([
+        cloudinary.destroyFiles(product.images_sources),
+        db().collection('product').deleteOne({_id: product._id}),
+        cache.clear()
+    ]);
+
+    return true;
 }
 
 module.exports.add = async (body, files) => {   
@@ -94,8 +92,9 @@ module.exports.add = async (body, files) => {
 }
 
 module.exports.update = async (data, files, id) => {
-
     const product = await this.findOne(id);
+    if (!product)
+        return false;
 
     let sources = null;
     if (files) {
@@ -116,6 +115,7 @@ module.exports.update = async (data, files, id) => {
     }});
 
     await cache.clear();
+    return true;
 }
 
 module.exports.listTopTenSeller = async (categoryId, brandId) => {
@@ -123,12 +123,17 @@ module.exports.listTopTenSeller = async (categoryId, brandId) => {
     return await db().collection('product').find(filter).sort({sell_count: -1}).limit(10).toArray();
 }
 
-module.exports.findOne = async (id) => await db().collection('product').findOne({_id: ObjectId(id)});
+module.exports.findOne = async (id) => {
+    if (!ObjectId.isValid(id))
+        return false;
+    return await db().collection('product').findOne({_id: ObjectId(id)});
+} 
 
-module.exports.count = async (filter) => await db().collection('product').countDocuments(filter);
+module.exports.count = async (filter) => { 
+    return await db().collection('product').countDocuments(filter); 
+}
 
-module.exports.checkDuplicated = async (id, newName) => {
-    
+module.exports.checkDuplicated = async (id, newName) => {  
     const filter = { $and: [ { name: newName } ]};
     if (id) filter.$and.push({ _id: { $ne: ObjectId(id) } });
     return await db().collection('product').findOne(filter);

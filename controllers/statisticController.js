@@ -1,6 +1,4 @@
 const productModel = require('../models/productModel');
-const brandModel = require('../models/brandModel');
-const categoryModel = require('../models/categoryModel');
 const orderModel = require('../models/orderModel');
 
 module.exports.sales = async (req, res, next) => {
@@ -25,16 +23,9 @@ module.exports.sales = async (req, res, next) => {
 }
 
 module.exports.topTenSeller = async (req, res, next) => {
-  const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
-    productModel.listTopTenSeller(req.query.category, req.query.brand)
-  ]);
-
+  const listProduct = await productModel.listTopTenSeller(req.query.category, req.query.brand);
   res.render('statistic/topTenSeller', {
-    listBrand: result[0],
-    listCategory: result[1],
-    listProduct: result[2],
+    listProduct: listProduct,
     brandId: req.query.brand,
     categoryId: req.query.category,
     title: 'Số lượng bán top 10',

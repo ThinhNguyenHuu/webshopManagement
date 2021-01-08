@@ -1,19 +1,15 @@
-const brandModel = require('../models/brandModel');
-const categoryModel = require('../models/categoryModel');
 const orderModel = require('../models/orderModel');
-
 
 const ORDER_PER_PAGE = 8;
 
 module.exports.index = async (req, res, next) => {
 
-  const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
-    orderModel.list({}, req.query.page, ORDER_PER_PAGE)
-  ]);
+  const { 
+    listOrder, 
+    page, 
+    lastPage 
+  } = await orderModel.list({}, req.query.page, ORDER_PER_PAGE);
 
-  const { listOrder, page, lastPage } = result[2];
   listOrder.map(order => {
     let color = 'red'
     if (order.status === 'Đang giao hàng')  color = 'orange'
@@ -23,8 +19,6 @@ module.exports.index = async (req, res, next) => {
 
   res.render('order/index', {
     title: 'Đơn đặt hàng',
-    listBrand: result[0],
-    listCategory: result[1],
     listOrder,
     pageLink: '/order',
     page,
@@ -42,14 +36,18 @@ const PRODUCT_PER_PAGE = 8;
 module.exports.details = async (req, res, next) => {
   
   const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
     orderModel.findOne(req.params._id),
     orderModel.getOrderProduct(req.params._id, req.query.page, PRODUCT_PER_PAGE)
   ]);
 
-  const order = result[2];
-  const { orderProduct, page, lastPage } = result[3];
+  console.log(result);
+
+  if (!result[0] || !result[1])
+    return next();
+
+  const order = result[0];
+  const { orderProduct, page, lastPage } = result[1];
+  
   const orderStatus = {
     waitingForProduct: order.status === 'Chờ lấy hàng',
     deliveringProduct: order.status === 'Đang giao hàng',
@@ -58,8 +56,6 @@ module.exports.details = async (req, res, next) => {
 
   res.render('order/details', {
     title: 'Chi tiết đơn đặt hàng',
-    listBrand: result[0],
-    listCategory: result[1],
     order,
     orderProduct,
     page,

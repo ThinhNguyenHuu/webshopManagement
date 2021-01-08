@@ -27,7 +27,7 @@ module.exports.getUserAccessData = async () => {
       'ids': 'ga:' + viewId,
       'start-date': '6daysAgo',
       'end-date': 'today',
-      'metrics': 'ga:users',
+      'metrics': 'ga:sessions',
       'dimensions': 'ga:date'
     });
 
@@ -80,7 +80,7 @@ module.exports.getUserLocationData = async () => {
       'ids': 'ga:' + viewId,
       'start-date': '30daysAgo',
       'end-date': 'today',
-      'metrics': 'ga:users',
+      'metrics': 'ga:sessions',
       'dimensions': 'ga:city',
       'max-results': 5
     });

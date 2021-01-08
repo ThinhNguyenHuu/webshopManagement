@@ -1,3 +1,10 @@
+<script>
+function deleteConfirmDialog(id, page) {
+  if (confirm("Bạn có chắc muốn xóa sản phẩm ?"))
+    window.location.href = `/product/delete/${id}?page=${page}`
+}
+</script>
+
 
 <div id="content">
   <div id="content-header">
@@ -80,7 +87,7 @@
                 <td>
                   <div style="text-align: center;">
                     <a href="/product/edit/{{_id}}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                    <a href="/product/delete/{{_id}}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>     
+                    <a style="cursor: pointer;" onclick="deleteConfirmDialog('{{_id}}', '{{../page}}')"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                   </div>
                 </td>
               </tr>

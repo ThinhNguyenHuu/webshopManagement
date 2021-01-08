@@ -26,22 +26,12 @@ module.exports.list = async (pageIndex, itemPerPage) => {
   page = page < 0 ? 1 : page;
   page = page > lastPage ? lastPage : page;
 
-  const result = await Promise.all([
-    brandModel.list(),
-    categoryModel.list(),
-    db().collection('user').find({}, {
-      skip: itemPerPage * (page - 1),
-      limit: itemPerPage
-    }).sort({_id: -1}).toArray()
-  ]);
+  const listUser = await db().collection('user').find({}, {
+    skip: itemPerPage * (page - 1),
+    limit: itemPerPage
+  }).sort({_id: -1}).toArray();
 
-  const data = {
-    listBrand: result[0],
-    listCategory: result[1],
-    listUser: result[2],
-    page,
-    lastPage
-  };
+  const data = { listUser, page, lastPage };
 
   // cache data
   await cache.set(key, data);
@@ -49,9 +39,16 @@ module.exports.list = async (pageIndex, itemPerPage) => {
   return data;
 }
 
-module.exports.findOne = async (id) => await db().collection('user').findOne({_id: ObjectId(id)});
+module.exports.findOne = async (id) => {
+  if (!ObjectId.isValid(id))
+    return false;
+  return await db().collection('user').findOne({_id: ObjectId(id)});
+}
 
 module.exports.ban = async (id) => {
+  if (!ObjectId.isValid(id))
+    return false;
+
   await Promise.all([
     db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
       ban: true
@@ -59,9 +56,14 @@ module.exports.ban = async (id) => {
     ,
     cache.clear()
   ]);
+
+  return true;
 }
 
 module.exports.unban = async (id) => {
+  if (!ObjectId.isValid(id))
+    return false;
+
   await Promise.all([
     db().collection('user').updateOne({_id: ObjectId(id)}, {$set: {
       ban: false
@@ -69,10 +71,14 @@ module.exports.unban = async (id) => {
     ,
     cache.clear()
   ]);
+
+  return true;
 }
 
 module.exports.update = async (data, file, id) => {
   const user = await this.findOne(id);
+  if (!user)
+    return false;
 
   // upload image
   let source = null;
@@ -97,11 +103,17 @@ module.exports.update = async (data, file, id) => {
     ,
     cache.clear()
   ]);
+
+  return true;
 }
 
-module.exports.findByUsername = async (username) => await db().collection('user').findOne({username: username});
+module.exports.findByUsername = async (username) => {
+  return await db().collection('user').findOne({username: username});
+}
 
-module.exports.findByEmail = async (email) => await db().collection('user').findOne({email: email});
+module.exports.findByEmail = async (email) => {
+  return await db().collection('user').findOne({email: email});
+}
 
 module.exports.checkCredential = async (password, username) => {
   const user = await this.findByUsername(username);
@@ -142,7 +154,9 @@ module.exports.updatePassword = async (password, id) => {
   });
 }
 
-module.exports.count = async () => await db().collection('user').countDocuments({});
+module.exports.count = async () => {
+  return await db().collection('user').countDocuments({});
+}
 
 const hashPassword = async (password) => {
   const saltRounds = 10;

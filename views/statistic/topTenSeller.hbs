@@ -49,7 +49,7 @@
             <tbody>
               {{#each listProduct}}
               <tr class="gradeA">
-                <td><strong>{{name}}</strong></td>
+                <td><strong><a href="/product/edit/{{_id}}">{{name}}</a></strong></td>
                 <td>{{formatPrice price}}</td>
                 <td>{{discount}}</td>
                 <td>{{sell_count}}</td>

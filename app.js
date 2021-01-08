@@ -23,6 +23,7 @@ const statisticRouter = require('./routes/statistic');
 const apiRouter = require('./api');
 const {ensureAuthenticated} = require('./middlewares/authenticationMiddleware');
 const { ObjectId } = require('mongodb');
+const {getSidebarData} = require('./middlewares/layoutDataMiddleware');
 
 const app = express();
 
@@ -69,6 +70,8 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
+
+app.use(getSidebarData);
 
 // Routes
 app.use('/auth', authRouter);

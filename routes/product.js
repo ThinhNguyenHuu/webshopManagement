@@ -7,8 +7,6 @@ router.get('/', controller.index);
 
 router.get('/delete/:_id', controller.get_delete);
 
-router.post('/delete/:_id', controller.post_delete);
-
 router.get('/add', controller.get_add);
 
 router.post('/add', productValidator, controller.post_add);
