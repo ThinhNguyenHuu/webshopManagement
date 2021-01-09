@@ -1,6 +1,6 @@
 const colors = [
-  'rgba(255, 99, 132, 0.6)',
   'rgba(54, 162, 235, 0.6)',
+  'rgba(255, 99, 132, 0.6)',
   'rgba(255, 206, 86, 0.6)',
   'rgba(75, 192, 192, 0.6)',  
   'rgba(153, 102, 255, 0.6)',
@@ -99,8 +99,9 @@ function drawUserLocationChart(locations, counts) {
   });
 }
 
+
 function updateUserAccess() {
-  axios.get('api/getUserAccess')
+  axios.get('/api/analytics/getUserAccess')
     .then(function(response) {
       const {userAccess} = response.data;
       if (userAccess) {
@@ -112,7 +113,7 @@ function updateUserAccess() {
 }
 
 function updateTopSearchQuery() {
-  axios.get('api/getTopSearchQuery')
+  axios.get('/api/analytics/getTopSearchQuery')
     .then(function(response) {
       const {topSearchQuery} = response.data;
       if (topSearchQuery) {
@@ -125,7 +126,7 @@ function updateTopSearchQuery() {
 }
 
 function updateUserLocation() {
-  axios.get('api/getUserLocation')
+  axios.get('/api/analytics/getUserLocation')
     .then(function(response) {
       const {userLocation} = response.data;
       if (userLocation) {
@@ -141,7 +142,7 @@ function updateOnlineUser() {
   window.addEventListener('DOMContentLoaded', function() {
     const tag = document.getElementById('online-user');
     const interval = setInterval(() => {
-      axios.get('/api/getOnlineUser')
+      axios.get('/api/analytics/getOnlineUser')
       .then(function(response) {
         if (response.data.onlineUser)
           tag.innerHTML = response.data.onlineUser;
@@ -153,11 +154,7 @@ function updateOnlineUser() {
   });
 }
 
-function updateChart() {
-  updateUserAccess();
-  updateTopSearchQuery();
-  updateUserLocation();
-}
-
 updateOnlineUser();
-updateChart();
+updateUserAccess();
+updateTopSearchQuery();
+updateUserLocation();
