@@ -14,14 +14,12 @@ router.post('/login', (req, res, next) => {
     if (err) { return next(err); }
     if (!user) { 
       req.flash('error', info.message); 
+      if (info.requireActive)
+        return res.redirect('/auth/register/verify/' + info.id);
       return res.redirect('/auth/login'); 
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      if (!user.active) { 
-        req.flash('error', 'Tài khoản chưa xác nhận email.');
-        return res.redirect('/auth/register/verify/' + user._id); 
-      }
       return res.redirect('/'); 
     });
   })(req, res, next);

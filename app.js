@@ -74,6 +74,7 @@ app.use((req, res, next) => {
 app.use(getSidebarData);
 
 // Routes
+app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 app.use('/', ensureAuthenticated, indexRouter);
 app.use('/product', ensureAuthenticated, productRouter);
@@ -82,7 +83,6 @@ app.use('/brand', ensureAuthenticated, brandRouter);
 app.use('/user', ensureAuthenticated, userRouter);
 app.use('/order', ensureAuthenticated, orderRouter);
 app.use('/statistic', ensureAuthenticated, statisticRouter);
-app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
