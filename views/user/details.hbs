@@ -36,6 +36,11 @@
                           <td><strong>Email</strong></td>
                           <td>{{userEdit.email}}</td>
                       </tr>
+                      <tr>
+                          <td><strong>Loại</strong></td>
+                          {{#if userEdit.is_admin}}<td style="color: red;"><strong>Admin</strong></td>
+                          {{else}}<td style="color: green;"><strong>Khách hàng</strong></td> {{/if}}
+                      </tr>
                       </tbody>
                     </table>
                   </div>

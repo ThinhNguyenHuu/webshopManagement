@@ -20,6 +20,7 @@
               <tr>
                 <th class="col-name" style="border: 1px solid #ddd;padding:10px">Tên</th>
                 <th class="col-description" style="border: 1px solid #ddd;padding:10px">Email</th>
+                <th class="col-name" style="border: 1px solid #ddd;padding:10px">Loại</th>
                 <th class="col-action" style="border: 1px solid #ddd;padding:10px">Chi tiết</th>
               </tr>
             </thead>
@@ -28,6 +29,8 @@
                 <tr class="gradeA">
                 <td><strong><a href="/user/{{_id}}">{{fullname}}</a></strong></td>
                 <td><a href="/user/{{_id}}"></a>{{email}}</a></td>
+                {{#if is_admin}}<td style="color: red;"><strong>Admin</strong></td>
+                {{else}}<td style="color: green;"><strong>Khách hàng</strong></td> {{/if}}
                 <td>
                   <div style="text-align: center;">
                     <a href="/user/{{_id}}" class="details"><i class="material-icons" data-toggle="tooltip" title="Details">&#xE88E;</i></a> 

@@ -12,19 +12,22 @@
 </head>
 
 <body>
-{{!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 function resendMail(id) {
-  axios.get('/api/resendVerificationCode/' + id)
+  const label = document.getElementById('label-sent-mail')
+  label.innerHTML = 'Đang gửi';
+  axios.get(`/api/verify/${id}`)
     .then(function(response) {
       if (response.data.result) {
-        document.getElementById('label-sent-mail').style.display = 'inline';
+        label.innerHTML = 'Đã gửi';
       } else {
-        setTimeout(resendMail, 500);
+        label.innerHTML = response.data.error;
       }
-    });
+    })
+    .catch(() => {label.innerHTML = 'Có lỗi đã xảy ra'});
 }
-</script> --}}
+</script>
 
   <div id="loginbox"> 
 
@@ -34,7 +37,7 @@ function resendMail(id) {
     </div>   
     {{/if}}       
     
-    <form action="/auth/forgetPassword/verify/{{userId}}" id="loginform" class="form-vertical" method="post" autocomplete="off">
+    <form action="/auth/{{#if isRegister}}register{{else}}forgetPassword{{/if}}/verify/{{userId}}" id="loginform" class="form-vertical" method="post" autocomplete="off">
       <p class="normal_text">Nhập mã xác nhận được gửi qua Email của bạn</p>
   
       <div class="controls">
@@ -45,8 +48,8 @@ function resendMail(id) {
           
       <div class="form-actions">
         <button type="submit" class="btn btn-success" style="float: right;">Xác nhận</button>
-        {{!-- <span class="pull-right" style="margin:5px 10px 0 0;font-size:14px;font-weight:400;color:white;cursor:pointer"><a href="#" onclick="resendMail('{{userId}}')">Gửi lại</a></span>
-        <span id="label-sent-mail" class="pull-right" style="margin:5px 10px 0 0;font-size:14px;font-weight:700;color:red;display:none">Đã gửi</span> --}}
+        <span class="pull-right" style="margin:5px 10px 0 0;font-size:14px;font-weight:400;color:white;cursor:pointer"><a href="#" onclick="resendMail('{{userId}}')">Gửi lại</a></span>
+        <span id="label-sent-mail" class="pull-right" style="margin:5px 10px 0 0;font-size:14px;font-weight:700;color:red;"></span>
       </div>
     </form>
  

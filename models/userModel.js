@@ -1,10 +1,9 @@
-const brandModel = require('./brandModel');
-const categoryModel = require('./categoryModel');
 const { ObjectId } = require('mongodb');
 const {db} = require('../db');
 const cloudinary = require('../cloudinary');
 const bcrypt = require('bcrypt');
 const cache = require('../lru-cache');
+const mailer = require('../mailer');
 
 module.exports.list = async (pageIndex, itemPerPage) => {
 
@@ -75,6 +74,35 @@ module.exports.unban = async (id) => {
   return true;
 }
 
+module.exports.register = async (data) => {
+  try {
+    const verifyHash = await hash(Math.floor(Math.random() * 101).toString());
+    await mailer.sendVerificationCode(data.email, verifyHash);
+
+    data.password = await hash(data.password);
+
+    const result = await Promise.all([
+      db().collection('user').insertOne({
+        fullname: data.fullname,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        verification: verifyHash,
+        ban: false,
+        avatar: null,
+        active: false,
+        is_admin: true
+      })
+      ,
+      cache.clear()
+    ]);
+  
+    return { id: result[0].insertedId, verificationCode: verifyHash };
+  } catch (e) {
+    return null;
+  }
+}
+
 module.exports.update = async (data, file, id) => {
   const user = await this.findOne(id);
   if (!user)
@@ -90,7 +118,7 @@ module.exports.update = async (data, file, id) => {
   }
 
   if(data.newPassword) 
-    data.password = await hashPassword(data.newPassword);
+    data.password = await hash(data.newPassword);
   else data.password = user.password;
 
   // update db
@@ -139,14 +167,22 @@ module.exports.checkCredentialWithId = async (password, id) => {
 }
 
 module.exports.checkVerificationCode = async (code, id) => {
-  const find = this.findOne(id);
+  const find = await this.findOne(id);
   if (!find) 
     return false;
-  return find.verification != code;
+  return find.verification === code;
+}
+
+module.exports.verifyUser = async (id) => {
+  await db().collection('user').updateOne({_id: ObjectId(id)}, {
+    $set: {
+      active: true
+    }
+  });
 }
 
 module.exports.updatePassword = async (password, id) => {
-  const hash = await hashPassword(password);
+  const hash = await hash(password);
   await db().collection('user').updateOne({_id: ObjectId(id)}, {
     $set: {
       password: hash
@@ -158,9 +194,9 @@ module.exports.count = async () => {
   return await db().collection('user').countDocuments({});
 }
 
-const hashPassword = async (password) => {
+const hash = async (data) => {
   const saltRounds = 10;
   const salt = await bcrypt.genSalt(saltRounds);
-  const hash = await bcrypt.hash(password, salt);
+  const hash = await bcrypt.hash(data, salt);
   return hash;
 }

@@ -100,3 +100,43 @@ module.exports.updatePasswordValidator = [
       return true;
     })
 ]
+
+module.exports.registerValidator = [
+  check('fullname')
+    .trim()
+    .isLength({min: 5}).withMessage('Tên tối thiểu 5 ký tự.')
+    .isLength({max: 30}).withMessage('Tên tối đa 30 ký tự')
+    ,
+  check('username')
+    .trim()
+    .isLength({min: 3}).withMessage('Tên đăng nhập tối thiểu 3 ký tự.')
+    .isLength({max: 30}).withMessage('Tên đăng nhập tối đa 30 ký tự.')
+    .custom(async (username) => {
+      const find = await userModel.findByUsername(username);
+      if (find)
+        throw new Error('Tên đăng nhập đã bị trùng.');
+      return true;
+    })
+    ,
+  check('email')
+    .trim()
+    .isEmail().withMessage('Email không hợp lệ.')
+    .custom(async (email) => {
+      const find = await userModel.findByEmail(email);
+      if (find)
+        throw new Error('Email đã có người sử dụng.')
+      return true;
+    })
+    ,
+  check('password')
+    .trim()
+    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.')
+    ,
+  check('confirmPassword')
+    .trim()
+    .custom((confirmPassword, {req}) => {
+      if (confirmPassword != req.body.password)
+        throw new Error('Nhập lại mật khẩu không trùng khớp.')
+      return true;
+    })
+]

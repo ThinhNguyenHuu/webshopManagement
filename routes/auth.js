@@ -2,15 +2,36 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/authController');
 const passport = require('../passport/index');
-const { emailValidator, updatePasswordValidator } = require('../middlewares/validationMiddleware');
+const {
+  emailValidator, 
+  updatePasswordValidator,
+  registerValidator
+} = require('../middlewares/validationMiddleware');
 
 router.get('/login', controller.get_login);
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { 
+      req.flash('error', info.message); 
+      return res.redirect('/auth/login'); 
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      if (!user.active) { 
+        req.flash('error', 'Tài khoản chưa xác nhận email.');
+        return res.redirect('/auth/register/verify/' + user._id); 
+      }
+      return res.redirect('/'); 
+    });
+  })(req, res, next);
+});
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/auth/login',
-  failureFlash: true
-}));
+router.get('/register', controller.get_register);
+router.post('/register', registerValidator, controller.post_register);
+
+router.get('/register/verify/:_id', (req, res, next) => { res.locals.isRegister = true; next(); }, controller.get_verify);
+router.post('/register/verify/:_id', (req, res, next) => { res.locals.isRegister = true; next(); }, controller.post_verify);
 
 router.post('/forgetPassword', emailValidator, controller.forgetPassword);
 
