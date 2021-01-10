@@ -68,6 +68,8 @@ module.exports.delete = async (id) => {
         cache.clear()
     ]);
 
+    cache.clearClientCache();
+    
     return true;
 }
 
@@ -75,20 +77,23 @@ module.exports.add = async (body, files) => {
 
     const sources = await cloudinary.uploadFiles(files);
     
-    await db().collection('product').insertOne({
-        name: body.name, 
-        images_sources: sources, 
-        price: Double(body.price), 
-        discount: Double(body.discount), 
-        description: body.description, 
-        brand: ObjectId(body.brand), 
-        category: ObjectId(body.category),
-        reviews: [],
-        view_count: 0,
-        sell_count: 0
-    });
+    await Promise.all([
+        db().collection('product').insertOne({
+            name: body.name, 
+            images_sources: sources, 
+            price: Double(body.price), 
+            discount: Double(body.discount), 
+            description: body.description, 
+            brand: ObjectId(body.brand), 
+            category: ObjectId(body.category),
+            reviews: [],
+            view_count: 0,
+            sell_count: 0
+        }),
+        cache.clear()
+    ]);
 
-    await cache.clear();
+    cache.clearClientCache();
 }
 
 module.exports.update = async (data, files, id) => {
@@ -104,17 +109,20 @@ module.exports.update = async (data, files, id) => {
         sources = [...new_sources];
     }
 
-    await db().collection('product').updateOne( {_id: ObjectId(id)} ,{$set: {
-        name: data.name, 
-        price: Double(data.price),
-        images_sources: sources ? sources : product.images_sources, 
-        discount: Double(data.discount), 
-        description: data.description, 
-        brand: ObjectId(data.brand), 
-        category: ObjectId(data.category)
-    }});
+    await Promise.all([
+        db().collection('product').updateOne( {_id: ObjectId(id)} ,{$set: {
+            name: data.name, 
+            price: Double(data.price),
+            images_sources: sources ? sources : product.images_sources, 
+            discount: Double(data.discount), 
+            description: data.description, 
+            brand: ObjectId(data.brand), 
+            category: ObjectId(data.category)
+        }}),
+        cache.clear()
+    ]);
 
-    await cache.clear();
+    cache.clearClientCache();
     return true;
 }
 

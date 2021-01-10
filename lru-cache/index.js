@@ -21,7 +21,20 @@ module.exports.set = (key, value) => {
 module.exports.clear = () => {
   return new Promise(resolve => {
     cache.reset();
-    axios.get('http://inspiredigital.herokuapp.com/api/cache/clear');
     resolve(true);
+  })
+}
+
+module.exports.clearClientCache = () => {
+  return new Promise(resolve => {
+     axios.get('http://inspiredigital.herokuapp.com')
+    .then(() => {
+      console.log('Clear client cache');
+      resolve(true);
+    })
+    .catch((e) => {
+      console.log('Fail to clear client cache');
+      resolve(true);
+    });
   })
 }
