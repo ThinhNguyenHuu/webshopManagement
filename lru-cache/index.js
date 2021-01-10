@@ -27,7 +27,7 @@ module.exports.clear = () => {
 
 module.exports.clearClientCache = () => {
   return new Promise(resolve => {
-     axios.get('http://inspiredigital.herokuapp.com')
+     axios.get('http://inspiredigital.herokuapp.com/api/cache/clear')
     .then(() => {
       console.log('Clear client cache');
       resolve(true);
