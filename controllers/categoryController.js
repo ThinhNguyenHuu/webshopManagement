@@ -15,7 +15,7 @@ module.exports.index = async (req, res, next) => {
     listProduct, 
     page, 
     lastPage 
-  } = productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, req.params._id, brandId);
+  } = await productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, req.params._id, brandId);
 
   // get category
   const category = res.locals.listCategory.find(category => ObjectId(category._id).equals(ObjectId(req.params._id)));

@@ -9,7 +9,6 @@ module.exports.list = async (filter, pageIndex, itemPerPage) => {
   const key = ['listOrder', pageIndex, itemPerPage].join('/');
 
   // get cached data
-  await cache.clear();
   const value = await cache.get(key);
   if (value) return value;
 

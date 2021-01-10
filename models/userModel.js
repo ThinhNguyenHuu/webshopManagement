@@ -148,6 +148,9 @@ module.exports.checkCredential = async (password, username) => {
 
   if (!user || !user.is_admin)
     return { error: 'Người dùng không tồn tại.' }
+
+  if (user.ban)
+    return { error: 'Người dùng đã bị chặn.' }
   
   if (!await bcrypt.compare(password, user.password))
     return { error: 'Sai mật khẩu.' }

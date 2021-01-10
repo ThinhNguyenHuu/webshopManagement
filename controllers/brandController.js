@@ -12,7 +12,7 @@ module.exports.index = async (req, res, next) => {
     listProduct, 
     page, 
     lastPage 
-  } = productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, null, req.params._id);
+  } = await productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, null, req.params._id);
 
   const brand = res.locals.listBrand.find(brand => ObjectId(brand._id).equals(ObjectId(req.params._id)));
 
