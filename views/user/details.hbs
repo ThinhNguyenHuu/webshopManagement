@@ -38,8 +38,16 @@
                       </tr>
                       <tr>
                           <td><strong>Loại</strong></td>
+                          {{#if userEdit.superadmin}}<td style="color: orange;"><strong>Superadmin</strong></td>
+                          {{else}}
                           {{#if userEdit.is_admin}}<td style="color: red;"><strong>Admin</strong></td>
                           {{else}}<td style="color: green;"><strong>Khách hàng</strong></td> {{/if}}
+                          {{/if}}
+                      </tr>
+                      <tr>
+                        <td><strong>Trạng thái</strong></td>
+                        {{#if ban}}<td style="color:red"><strong>Khóa</strong></td>
+                        {{else}}<td style="color:green"><strong>Hoạt động</strong></td>{{/if}}
                       </tr>
                       </tbody>
                     </table>
@@ -47,24 +55,40 @@
                 </div>
               </div>
               <div class="panel-footer" style="text-align: right;">
-                {{#if isNotMyAccount}}
-                  {{#if userEdit.ban}}
-                  <a class="btn btn-warning" type="button"
-                            href="/user/unban/{{userEdit._id}}"
-                            data-toggle="tooltip"
-                            data-original-title="Bỏ chặn">Bỏ chặn</a>
-                  {{else}}
-                  <a class="btn btn-danger" type="button"
-                            href="/user/ban/{{userEdit._id}}"
-                            data-toggle="tooltip"
-                            data-original-title="Chặn">Chặn</a>
+                {{#if isNotMyAccount}}      {{!-- If is not my account --}}
+                  {{#if userEdit.is_admin}} {{!-- If userEdit is an admin --}}
+                    {{#if user.superadmin}} {{!-- If user is superadmin --}}
+                      {{#if userEdit.ban}}
+                      <a class="btn btn-warning" type="button"
+                                    href="/user/unban/{{userEdit._id}}"
+                                    data-toggle="tooltip"
+                                    data-original-title="Bỏ khóa">Bỏ khóa</a>
+                      {{else}}
+                      <a class="btn btn-danger" type="button"
+                                href="/user/ban/{{userEdit._id}}"
+                                data-toggle="tooltip"
+                                data-original-title="Khóa">Khóa</a>
+                      {{/if}}
+                    {{/if}}
+
+                  {{else}}  {{!-- If userEdit is not an admin --}}
+                    {{#if userEdit.ban}}
+                      <a class="btn btn-warning" type="button"
+                                    href="/user/unban/{{userEdit._id}}"
+                                    data-toggle="tooltip"
+                                    data-original-title="Bỏ khóa">Bỏ khóa</a>
+                      {{else}}
+                      <a class="btn btn-danger" type="button"
+                                href="/user/ban/{{userEdit._id}}"
+                                data-toggle="tooltip"
+                                data-original-title="Khóa">Khóa</a>
+                    {{/if}}
                   {{/if}}
-                
-                {{else}}
+                {{else}}    {{!-- If is my account --}}
                 <a class="btn btn-success" type="button"
                             href="/user/edit/{{userEdit._id}}"
                             data-toggle="tooltip"
-                            data-original-title="Sửa">Sửa</a>
+                            data-original-title="Chỉnh sửa">Chỉnh sửa</a>
                 {{/if}}
 
               </div>

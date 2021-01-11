@@ -5,6 +5,26 @@
       <li><a href="/">Home</a> <span class="divider">/</span></li>
       <li class="active"><a href="{{pageLink}}">{{title}}</a></li>
     </ul>
+    {{#if user.superadmin}}
+    <div class="row-fluid">
+      <div class="search-bar" style="margin-bottom: 20px;">
+        <div class="span3">
+          <div class="span6" style="text-align: start;">
+            <a href="/user/add" class="btn btn-success align-items-end" style="margin-right: 40px;width: 50px;height: 20px">
+              <div class="row">
+                <div class="span6">
+                  <i style="font-size: 21px;padding-left:10px; margin-left:15px" class="material-icons">&#xE147;</i> 
+                </div>
+                <div class="span6">
+                  <span style="box-sizing: border-box;margin-left:5px">Thêm</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
   </div>
   <div class="container-fluid">
     <div class="row-fluid">
@@ -26,8 +46,11 @@
                 <tr class="gradeA">
                 <td><strong><a href="/user/{{_id}}">{{fullname}}</a></strong></td>
                 <td><a href="/user/{{_id}}"></a>{{email}}</a></td>
+                {{#if superadmin}}<td style="color: orange;"><strong>Superadmin</strong></td>
+                {{else}}
                 {{#if is_admin}}<td style="color: red;"><strong>Admin</strong></td>
                 {{else}}<td style="color: green;"><strong>Khách hàng</strong></td> {{/if}}
+                {{/if}}
                 {{#if ban}}<td style="color:red"><strong>Khóa</strong></td>
                 {{else}}<td style="color:green"><strong>Hoạt động</strong></td>{{/if}}
                 <td>

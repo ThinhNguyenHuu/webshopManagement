@@ -14,7 +14,7 @@ module.exports.index = async (req, res, next) => {
     lastPage 
   } = await productModel.list(req.query.page, PRODUCT_PER_PAGE, searchText, null, null);
 
-  res.render('product/index', { 
+  res.render('product/list', { 
     title: 'Sản phẩm',
     listProduct,
     pageLink: '/product',

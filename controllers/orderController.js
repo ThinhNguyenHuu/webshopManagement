@@ -17,7 +17,7 @@ module.exports.index = async (req, res, next) => {
     order.statusColor = color;
   })
 
-  res.render('order/index', {
+  res.render('order/list', {
     title: 'Đơn đặt hàng',
     listOrder,
     pageLink: '/order',

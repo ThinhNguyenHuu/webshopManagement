@@ -3,7 +3,6 @@
 <div id="content">
 <div id="content-header">
   <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> </div>
-  <h1>Chỉnh sửa thông tin người dùng</h1>
 </div>
 
 <div class="errors-container">
@@ -20,54 +19,46 @@
     <div class="span12">
       <div class="widget-box">
         <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-          <h5>Thông tin người dùng</h5>
+          <h5>Thêm admin</h5>
         </div>
         <div class="widget-content nopadding">
-          <form action="/user/edit/{{user._id}}" method="POST" class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
+          <form action="/user/add" method="POST" class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
             <div class="control-group">
               <label class="control-label">Tên<span class="require-sign">*</span> :</label>
               <div class="controls">
-                <input type="text" class="span9" id="fullname" name="fullname" value="{{user.fullname}}" required/>
+                <input type="text" class="span9" id="fullname" name="fullname" required/>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Mật khẩu cũ<span class="require-sign">*</span> :</label>
+              <label class="control-label">Tên đăng nhập<span class="require-sign">*</span> :</label>
               <div class="controls">
-                <input type="password" class="span9" id="password" name="password" required/>
+                <input type="text" class="span9" id="username" name="username" required/>
               </div>
             </div>
             <div class="control-group">
-              <label class="control-label">Mật khẩu mới :</label>
+              <label class="control-label">Email<span class="require-sign">*</span> :</label>
               <div class="controls">
-                <input type="password" class="span9" id="newPassword" name="newPassword"/>
+                <input type="email" class="span9" id="email" name="email" required/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Mật khẩu<span class="require-sign">*</span> :</label>
+              <div class="controls">
+                <input type="password" class="span9" id="password" name="password"/>
               </div>
             </div><div class="control-group">
-              <label class="control-label">Nhập lại mật khẩu mới :</label>
+              <label class="control-label">Nhập lại mật khẩu<span class="require-sign">*</span> :</label>
               <div class="controls">
-                <input type="password" class="span9" id="newPasswordAgain" name="newPasswordAgain"/>
+                <input type="password" class="span9" id="confirmPassword" name="confirmPassword"/>
               </div>
             </div>
-            
-            {{#if user.avatar}}
-            <div style="width:870px; display: flex;flex-wrap: wrap;padding: 20px 100px;margin:0 auto;">
-              <a href="{{user.avatar.url}}" target="_blank">
-                <img class="img-details-thumbnail" src="{{user.avatar.url}}" alt="user-image">
-              </a>
-            </div>
-            {{/if}}
 
-						<div class="control-group">
-							<label class="control-label">Ảnh mới :</label>
-              <div class="controls">
-                <input type="file" name="image" id="image" accept="image/*"/>
-              </div>
-						</div>
              <div style="width:870px; display: flex;flex-wrap: wrap;padding: 20px 100px;margin:0 auto;">
               <div class="column" style="display:flex;flex-wrap: wrap;width:100%"></div>
             </div>
             <div class="form-actions" style="text-align: end;padding-right:70px">
 							<a class="btn btn-primary" href="javascript:history.back()" role="button">Hủy</a>
-              <button type="submit" class="btn btn-success">Lưu</button>
+              <button type="submit" class="btn btn-success">Thêm</button>
             </div>
           </form>
         </div>

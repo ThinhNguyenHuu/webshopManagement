@@ -16,7 +16,7 @@ module.exports.index = async (req, res, next) => {
 
   const brand = res.locals.listBrand.find(brand => ObjectId(brand._id).equals(ObjectId(req.params._id)));
 
-  res.render('product/index', { 
+  res.render('product/list', { 
     title: brand.name,
     listProduct,
     pageLink: '/brand/' + brand._id,

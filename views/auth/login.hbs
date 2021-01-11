@@ -25,14 +25,14 @@
         <div class="control-group">
             <div class="controls">
                 <div class="main_input_box">
-                    <span class="add-on bg_lg"><i class="icon-user"> </i></span><input type="text" placeholder="Username" id="username" name="username" required/>
+                    <span class="add-on bg_lg"><i class="icon-user"> </i></span><input type="text" placeholder="Tên đăng nhập" id="username" name="username" required/>
                 </div>
             </div>
         </div>
         <div class="control-group">
             <div class="controls">
                 <div class="main_input_box">
-                    <span class="add-on bg_ly"><i class="icon-lock"></i></span><input type="password" placeholder="Password" id="password" name="password" required/>
+                    <span class="add-on bg_ly"><i class="icon-lock"></i></span><input type="password" placeholder="Mật khẩu" id="password" name="password" required/>
                 </div>
             </div>
         </div>
@@ -40,8 +40,6 @@
           <button type="submit" class="btn btn-success" style="float: right;">Đăng nhập</button>
           <span class="pull-left"><a href="#" class="flip-link btn btn-info" id="to-recover">Quên mật khẩu ?</a></span>
         </div>
-
-        <div style="text-align: center;margin-top: 20px"><a href="/auth/register"><span style="font-weight: 400;font-size:18px">Chưa có tài khoản ?</span></a></div>
     </form>
 
     <form id="recoverform" action="/auth/forgetPassword" method="post" class="form-vertical">
@@ -57,9 +55,10 @@
         <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">&laquo; Quay lại</a></span>
         <button type="submit" class="btn btn-success" style="float: right;">Gửi</button>
       </div>
-    </form>
+    </form>  
   </div>
   
+
   <script src="/javascripts/jquery.min.js"></script>  
   <script src="/javascripts/matrix.login.js"></script> 
 </body>

@@ -30,7 +30,7 @@ module.exports.index = async (req, res, next) => {
   });
 
 
-  res.render('product/index', { 
+  res.render('product/list', { 
     title: category.name,
     category,
     brandId,

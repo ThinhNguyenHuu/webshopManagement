@@ -9,10 +9,6 @@ passport.use(new LocalStrategy(
   
     if (error)
       return done(null, false, { message: error });
-    
-    if (!result.active)
-      return done(null, false, { id: result._id, requireActive: true, message: 'Tài khoản chưa được kích hoạt' });
-    
     return done(null, result);
 }));
 

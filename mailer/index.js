@@ -4,13 +4,13 @@ module.exports.sendVerificationCode = async (email, verifyCode) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'inspirewebshop@gmail.com',
-      pass: '1234-abcd',
+      user: process.env.SUPERADMIN_EMAIL_USER,
+      pass: process.env.SUPERADMIN_EMAIL_PASS,
     }
   });
 
   const mailOptions = {
-    from: 'inspirewebshop@gmail.com',
+    from: process.env.SUPERADMIN_EMAIL_USER,
     to: email,
     subject: 'Mã xác nhận tài khoản',
     text: `Mã xác nhận: ${verifyCode}`

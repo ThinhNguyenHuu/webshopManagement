@@ -42,7 +42,7 @@ module.exports.productValidator = [
     })
 ];
 
-module.exports.userValidator = [
+module.exports.updateUserValidator = [
   check('fullname')
     .trim()
     .isLength({min: 5}).withMessage('Tên tối thiểu 5 ký tự.')
@@ -75,37 +75,16 @@ module.exports.userValidator = [
     })
 ]
 
-module.exports.emailValidator = [
-  check('email')
-    .trim()
-    .isEmail().withMessage('Email không hợp lệ.')
-    .custom(async (email) => {
-      const find = userModel.findByEmail(email);
-      if (!find)
-        throw new Error('Không có tài khoản sử dụng email này.');
-      return true;
-    })
-]
-
-module.exports.updatePasswordValidator = [
-  check('password')
-    .trim()
-    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.')
-    ,
-  check('confirmPassword')
-    .trim()
-    .custom((confirmPassword, {req}) => {
-      if (confirmPassword != req.body.password)
-        throw new Error('Nhập lại mật khẩu không trùng khớp.');
-      return true;
-    })
-]
-
-module.exports.registerValidator = [
+module.exports.addAdminValidator = [
   check('fullname')
     .trim()
     .isLength({min: 5}).withMessage('Tên tối thiểu 5 ký tự.')
     .isLength({max: 30}).withMessage('Tên tối đa 30 ký tự')
+    .custom((fullname) => {
+      if (fullname.toLowerCase() === 'admin')
+        throw new Error('Không thể dùng tên này.');
+      return true;
+    })
     ,
   check('username')
     .trim()
@@ -137,6 +116,32 @@ module.exports.registerValidator = [
     .custom((confirmPassword, {req}) => {
       if (confirmPassword != req.body.password)
         throw new Error('Nhập lại mật khẩu không trùng khớp.')
+      return true;
+    })
+]
+
+module.exports.emailValidator = [
+  check('email')
+    .trim()
+    .isEmail().withMessage('Email không hợp lệ.')
+    .custom(async (email) => {
+      const find = userModel.findByEmail(email);
+      if (!find)
+        throw new Error('Không có tài khoản sử dụng email này.');
+      return true;
+    })
+]
+
+module.exports.updatePasswordValidator = [
+  check('password')
+    .trim()
+    .isLength({min: 6}).withMessage('Mật khẩu có ít nhất 6 ký tự.')
+    ,
+  check('confirmPassword')
+    .trim()
+    .custom((confirmPassword, {req}) => {
+      if (confirmPassword != req.body.password)
+        throw new Error('Nhập lại mật khẩu không trùng khớp.');
       return true;
     })
 ]

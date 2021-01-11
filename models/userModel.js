@@ -3,7 +3,6 @@ const {db} = require('../db');
 const cloudinary = require('../cloudinary');
 const bcrypt = require('bcrypt');
 const cache = require('../lru-cache');
-const mailer = require('../mailer');
 
 module.exports.list = async (pageIndex, itemPerPage) => {
 
@@ -74,33 +73,27 @@ module.exports.unban = async (id) => {
   return true;
 }
 
-module.exports.register = async (data) => {
-  try {
-    const verifyHash = await hash(Math.floor(Math.random() * 101).toString());
-    await mailer.sendVerificationCode(data.email, verifyHash);
+module.exports.add = async (data) => {
+  const verifyHash = await hash(Math.floor(Math.random() * 101).toString());
+  data.password = await hash(data.password);
 
-    data.password = await hash(data.password);
+  const result = await Promise.all([
+    db().collection('user').insertOne({
+      fullname: data.fullname,
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      verification: verifyHash,
+      ban: false,
+      avatar: null,
+      active: true,
+      is_admin: true
+    })
+    ,
+    cache.clear()
+  ]);
 
-    const result = await Promise.all([
-      db().collection('user').insertOne({
-        fullname: data.fullname,
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        verification: verifyHash,
-        ban: false,
-        avatar: null,
-        active: false,
-        is_admin: true
-      })
-      ,
-      cache.clear()
-    ]);
-  
-    return { id: result[0].insertedId, verificationCode: verifyHash };
-  } catch (e) {
-    return null;
-  }
+  return result[0].insertedId
 }
 
 module.exports.update = async (data, file, id) => {
@@ -150,7 +143,7 @@ module.exports.checkCredential = async (password, username) => {
     return { error: 'Người dùng không tồn tại.' }
 
   if (user.ban)
-    return { error: 'Người dùng đã bị chặn.' }
+    return { error: 'Người dùng đã bị khóa.' }
   
   if (!await bcrypt.compare(password, user.password))
     return { error: 'Sai mật khẩu.' }
@@ -163,6 +156,9 @@ module.exports.checkCredentialWithId = async (password, id) => {
   if (!user || !user.is_admin)
     return { error: 'Người dùng không tồn tại.' }
   
+  if (user.ban)
+    return { error: 'Người dùng đã bị khóa.' }
+
   if (!await bcrypt.compare(password, user.password))
     return { error: 'Sai mật khẩu.' }
 
@@ -176,19 +172,11 @@ module.exports.checkVerificationCode = async (code, id) => {
   return find.verification === code;
 }
 
-module.exports.verifyUser = async (id) => {
-  await db().collection('user').updateOne({_id: ObjectId(id)}, {
-    $set: {
-      active: true
-    }
-  });
-}
-
 module.exports.updatePassword = async (password, id) => {
-  const hash = await hash(password);
+  const hashPass = await hash(password);
   await db().collection('user').updateOne({_id: ObjectId(id)}, {
     $set: {
-      password: hash
+      password: hashPass
     }
   });
 }
